@@ -1,0 +1,1020 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>TARS: Timestep-Aware Data Scaling for 3D-Free Video Re-Shooting</title>
+    <meta name="description" content="TARS: Timestep-Aware Data Scaling for 3D-Free Video Re-Shooting">
+    <meta name="keywords" content="TARS, Video Re-Shooting, Camera Control, Viewpoint Control, Video Generation">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#000000">
+    <link rel="shortcut icon" href="image/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="image/favicon.ico" type="image/x-icon">
+    
+    <style>
+        /* ================== 原有基础样式 100% 保留 ================== */
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background-color: #666; }
+
+        @font-face {
+            font-family: 'Roboto';
+            font-style: normal;
+            font-stretch: 100%;
+            font-display: block;
+            font-weight: 300 700;
+            src: url(roboto.woff2) format("woff2");
+            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+                        U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+                        U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        }
+
+        html { scroll-behavior: smooth; scroll-padding-top: 80px; } /* 为顶部导航栏预留跳转安全距离 */
+
+        * { box-sizing: border-box; }
+        body {
+            background-color: #17181a;
+            color: #fff;
+            font-family: "Roboto", sans-serif;
+            padding: 0;
+            margin: 0;
+            overflow-x: hidden;
+        }
+        a { color: #999 !important; text-decoration: none !important; }
+        a:hover { color: #999 !important; }
+        pre, code { color: #999 !important; }
+
+        video { background-color: #000; width: 100%; border-radius: 8px;}
+        #latent-interpolation video { aspect-ratio: 1; }
+        img { background-color: #17181a; }
+
+        #home { position: absolute; top: 20px; left: max(calc(50vw - 1920px/2 + 192px), 10%); }
+        #logo { width: 40px; height: 40px; position: fixed; top: 12px; right: max(calc(50vw - 1920px/2 + 192px), 10%); z-index: 1001; }
+        #intro { padding: 140px 0 80px; }
+        #intro h1 { font-size: 80px; font-weight: 300; margin: 20px 0; }
+        #intro h2 { margin: 20px 0 40px; font-weight: 300; color: #ccc; }
+        #intro strong { font-weight: 700; }
+        #intro h2 strong { color: #fff; }
+
+        section { max-width: 1350px !important; padding: 0 20px; margin: 0 auto; margin-top: 100px; }
+        section:first-of-type { margin-top: 0; }
+        .content { padding: 0; max-width: 1350px; margin: 0 auto; }
+        .content p { color: #999 !important; }
+
+        .button {
+            padding-right: 16px; border-radius: 8px; color: #fff; background-color: #74ff521f;
+            cursor: pointer; transition: background-color .5s; text-decoration: none; margin-right: 8px;
+            margin-bottom: 8px; display: inline-flex; align-items: center; overflow: hidden;
+        }
+        .button .icon { box-sizing: content-box; padding: 8px; background-color: #ccc; margin-right: 16px; transition: background-color .5s; }
+        .button:hover { background-color: #74ff52; color: #000; }
+        .button:hover .icon { background-color: #fff; }
+
+        .title {
+            background-color: #17181a; position: sticky; top: 60px; padding: 20px 0; font-size: 28px;
+            font-weight: 600; z-index: 1000; min-height: 60px; box-sizing: border-box; margin-bottom: 30px;
+        }
+        .description { padding: 0 0 20px; color: rgb(210, 209, 209); font-size: 20px; line-height: 1.7; font-weight: 300; }
+
+        #footer { background: linear-gradient(transparent, #000 100px); padding-top: 100px; box-sizing: content-box; z-index: 10000; position: relative; }
+        #footer #links { position: absolute; bottom: 16px; width: 100%; height: 50px; margin-top: 80px; display: flex; align-items: center; justify-content: center; gap: 8px; opacity: 0; }
+        #footer #links[visible] { transition: opacity .5s; transition-delay: .5s; opacity: 1; }
+
+        #contributors { min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center; font-size: 18px; font-weight: 200; }
+        #contributors strong { color: #999; font-weight: 200; margin-top: 40px; margin-bottom: 20px; display: block; }
+        #contributors a { display: block; padding: 3px 20px; border-radius: 100px; background-color: #000; transition: background-color .2s; text-decoration: none; color: #fff; }
+        
+        @media (hover: hover) {
+            #contributors a:hover { background: #222; }
+            tbody tr:hover { background: #222; }
+        }
+
+        /* 视频控件及基础控制 */
+        .audio-control { transition: transform 0.5s, box-shadow 0.5s; position: relative; }
+        .audio-control video { border-radius: 12px; display: block; width: 100%; }
+        .prompt-wrap { position: relative; }
+        
+        /* ================== [核心改动] 播放键 UI 优化 ================== */
+        video:not([src])::-webkit-media-controls { display: none !important; }
+        .prompt-wrap.is-playing:hover video::-webkit-media-controls { display: flex !important; }
+
+        .custom-play-overlay {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 70px; height: 70px; background: rgba(0,0,0,0.6); border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 2.2rem; color: #fff; pointer-events: none; opacity: 0;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); z-index: 10;
+            backdrop-filter: blur(4px); padding-left: 6px;
+        }
+        
+        .carousel-item:not(.is-playing):hover .custom-play-overlay,
+        .prompt-wrap:not(.is-playing):hover .custom-play-overlay {
+            opacity: 1; transform: translate(-50%, -50%) scale(1.15);
+            color: #74ff52; box-shadow: 0 0 25px rgba(116, 255, 82, 0.4);
+        }
+
+        /* ================== 修改：全局顶部横向常驻导航栏 ================== */
+        #top-nav {
+            position: fixed; top: 0; left: 0; width: 100%; height: 60px;
+            background: rgba(15, 15, 15, 0.85); backdrop-filter: blur(15px);
+            z-index: 99998;
+            display: flex; justify-content: center; align-items: center; gap: 35px;
+            border-bottom: 1px solid #333; box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+        .top-nav-link {
+            color: #aaa !important; font-size: 1.05rem; font-weight: 500; text-decoration: none !important;
+            transition: color 0.3s, transform 0.3s; position: relative; cursor: pointer; padding: 18px 0;
+        }
+        .top-nav-link:hover { color: #74ff52 !important; }
+        .top-nav-link.active { color: #74ff52 !important; font-weight: 600; }
+        .top-nav-link.active::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%;
+            height: 3px; background: #74ff52; border-radius: 2px 2px 0 0; box-shadow: 0 -2px 10px rgba(116, 255, 82, 0.5);
+        }
+        @media (max-width: 1024px) { 
+            #top-nav { justify-content: flex-start; padding: 0 20px; overflow-x: auto; gap: 20px; white-space: nowrap; }
+            #top-nav::-webkit-scrollbar { display: none; }
+        }
+
+        #dropdown-menu-research::-webkit-scrollbar { width: 4px; }
+        #dropdown-menu-research::-webkit-scrollbar-thumb { background: #888; border-radius: 2px; }
+
+        .copyright-footer { text-align: center; color: #666; padding: 60px 0 40px; font-size: 0.9rem; border-top: 1px solid #222; margin-top: 100px; }
+
+        .category-desc {
+            font-size: 1.15rem; line-height: 1.8; color: #d1d1d1;
+            margin-bottom: 20px; padding: 20px 30px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px; border-left: 4px solid #74ff52;
+        }
+
+        .carousel-container {
+            position: relative; width: 100%;
+            height: 40vh; min-height: 350px; max-height: 550px; 
+            display: flex; justify-content: center; align-items: center;
+            margin: 80px auto 100px; user-select: none;
+        }
+        .carousel-item {
+            position: absolute; width: 60%; 
+            transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            background: #000; will-change: transform, opacity;
+        }
+
+        .carousel-item.pos-center { transform: translateX(0) scale(1.25); opacity: 1; z-index: 3; filter: none; }
+        .carousel-item.pos-left { transform: translateX(-65%) scale(0.7); opacity: 0.85; z-index: 1; filter: none; cursor: pointer; }
+        .carousel-item.pos-right { transform: translateX(65%) scale(0.7); opacity: 0.85; z-index: 1; filter: none; cursor: pointer; }
+        .carousel-item.pos-hidden { transform: translateX(0) scale(0.5); opacity: 0; z-index: 0; pointer-events: none; visibility: hidden; }
+        
+        .carousel-item.pos-left video, .carousel-item.pos-right video, .carousel-item.pos-hidden video { pointer-events: none; }
+        .carousel-item.pos-center video { pointer-events: auto; }
+
+        .carousel-arrow {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            font-size: 3rem; color: rgba(255, 255, 255, 0.6); cursor: pointer; z-index: 10;
+            padding: 20px; transition: all 0.3s;
+        }
+        .carousel-arrow:hover { color: #74ff52; transform: translateY(-50%) scale(1.2); }
+        .left-arrow { left: 10%; }
+        .right-arrow { right: 10%; }
+
+
+        /* ================== 核心升级：严格按左右顺序分配的瀑布流 ================== */
+        
+        .staggered-grid {
+            display: flex;
+            align-items: flex-start;
+            column-gap: 20px;
+            padding: 30px 0;
+            width: 100%;
+        }
+        
+        .masonry-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: calc(50% - 10px);
+        }
+
+        @media (max-width: 768px) { 
+            .staggered-grid { flex-direction: column; } 
+            .masonry-col { width: 100%; }
+        }
+
+        .staggered-item video { width: 100%; height: auto !important; border-radius: 12px; display: block; }
+
+        .staggered-item {
+            position: relative; z-index: 1; width: 100%;
+            transition: z-index 0s, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .staggered-item:hover { z-index: 100; }
+        .staggered-item .audio-control { transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s; position: relative; }
+        .staggered-item:hover .audio-control { 
+            transform: scale(1.18); 
+            box-shadow: 0 25px 60px rgba(0,0,0,0.95); 
+        }
+
+        /* ================== “半遮面偷窥” CSS 高度截断特效与悬停防裁切魔术 ================== */
+        .peek-container {
+            max-height: 500px; 
+            overflow: hidden; position: relative;
+            transition: max-height 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            padding: 40px 100px 0 100px;
+            margin: -40px -100px 0 -100px;
+        }
+        
+        .peek-overlay {
+            position: absolute; bottom: 0; left: 0; width: 100%;
+            height: 180px; 
+            background: linear-gradient(to bottom, rgba(23,24,26,0) 0%, rgba(23,24,26,1) 100%);
+            pointer-events: none; z-index: 10; transition: opacity 0.5s;
+        }
+        .peek-container.fully-expanded .peek-overlay { opacity: 0; }
+
+        .show-more-wrapper { text-align: center; width: 100%; margin: 20px 0 80px 0; position: relative; z-index: 15; }
+        .show-more-btn {
+            background-color: transparent; color: #74ff52; border: 2px solid #74ff52;
+            padding: 14px 45px; font-size: 1.2rem; border-radius: 50px; cursor: pointer;
+            transition: all 0.3s ease; font-family: inherit; font-weight: 600;
+        }
+        .show-more-btn:hover { background-color: #74ff52; color: #000; transform: scale(1.05); box-shadow: 0 0 25px rgba(116, 255, 82, 0.4); }
+
+        .fade-in-element { opacity: 0; transform: translateY(40px); transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1), transform 1s cubic-bezier(0.25, 1, 0.5, 1); will-change: opacity, transform; }
+        .fade-in-element.visible { opacity: 1; transform: translateY(0); }
+
+        /* The template's OmniDirector demos stay in the source for reuse but are not rendered on TARS. */
+        #Top-Cases-Section, #More-Cases-Section, #Comparisons-More { display: none; }
+        #tars-cases { margin-top: 0; }
+        .case-placeholder {
+            min-height: 280px; display: flex; align-items: center; justify-content: center;
+            padding: 30px; text-align: center; color: #aaa; font-size: 1.1rem; line-height: 1.6;
+            border: 1px dashed #4f5c52; border-radius: 12px;
+            background: linear-gradient(135deg, rgba(116, 255, 82, 0.08), rgba(255,255,255,0.015));
+        }
+        .pipeline-placeholder {
+            min-height: 320px; display: flex; align-items: center; justify-content: center;
+            padding: 40px; margin: 20px auto; max-width: 95%; text-align: center;
+            border: 1px dashed #4f5c52; border-radius: 12px; color: #aaa;
+            background: linear-gradient(135deg, rgba(116, 255, 82, 0.08), rgba(255,255,255,0.015));
+        }
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+</head>
+<body>
+
+    <!-- 顶部横向响应式 ScrollSpy 导航栏 -->
+    <nav id="top-nav">
+        <a href="#intro" class="top-nav-link active">Home</a>
+        <a href="#Abstract" class="top-nav-link">Abstract</a>
+        <a href="#tars-cases" class="top-nav-link">Cases</a>
+        <a href="#Pipeline" class="top-nav-link">Pipeline</a>
+        <a href="#Acknowledgement" class="top-nav-link">Acknowledgement</a>
+        <a href="#ethical-considerations" class="top-nav-link">Responsible Use</a>
+        <a href="#BibTeX" class="top-nav-link">BibTeX</a>
+    </nav>
+
+    <!-- Intro 及大标题 -->
+    <div id="intro">
+        <div class="content">
+            <div style="text-align: center;">
+            <h2 style="font-size: 3.2rem; font-weight: 400; color: #f7fcf9;">
+                <strong>TARS</strong>: Timestep-Aware Data Scaling for 3D-Free Video Re-Shooting
+            </h2>
+            <div style="margin-top: 30px;"></div>
+
+            <span style="opacity: 0.6; font-size: 1.35rem;">
+                <a href="https://openreview.net/profile?id=~Jiwen_Liu1" target="_blank" rel="noopener noreferrer"><strong><em>Jiwen Liu</em></strong></a>,
+                <a href="https://openreview.net/profile?id=~Shujuan_Li2" target="_blank" rel="noopener noreferrer"><strong><em>Shujuan Li</em></strong></a>,
+                <a href="https://openreview.net/profile?id=~Xiaohan_Li8" target="_blank" rel="noopener noreferrer"><strong><em>Xiaohan Li</em></strong></a>,
+                <a href="https://openreview.net/profile?id=~Zijie_Meng2" target="_blank" rel="noopener noreferrer"><strong><em>Zijie Meng</em></strong></a>,<br>
+                <a href="https://openreview.net/profile?id=~Xinyue_Liu9" target="_blank" rel="noopener noreferrer"><strong><em>Xinyue Liu</em></strong></a>,
+                <a href="https://openreview.net/profile?id=~Yulong_Xu1" target="_blank" rel="noopener noreferrer"><strong><em>Yulong Xu</em></strong></a>,
+                <a href="https://openreview.net/profile?id=~Yan_Zhou14" target="_blank" rel="noopener noreferrer"><strong><em>Yan Zhou</em></strong></a>,
+                <a href="https://openreview.net/profile?id=~Guoxin_Zhang1" target="_blank" rel="noopener noreferrer"><strong><em>Guoxin Zhang</em></strong></a>
+            </span>
+            <div style="margin-top: 20px;"></div>
+            <div style="margin-top: 75px;"></div>
+            
+            <div class="publication-links" style="position: relative; z-index: 2000; transform: scale(1.2); transform-origin: center center; margin-left: -20px;">
+                <span class="link-block"><a href="#Abstract" class="external-link button is-normal is-rounded light-btn btn-font"><span class="icon"><i class="fas fa-file-lines"></i></span><span class="sansfont">Abstract</span></a></span>
+                <span class="link-block"><a href="https://github.com/YMlinfeng/TARS.github.io" target="_blank" rel="noopener noreferrer" class="external-link button is-normal is-rounded light-btn btn-font"><span class="icon"><i class="fa fa-code" aria-hidden="true"></i></span><span class="sansfont">Project</span></a></span>
+                <span class="link-block"><a href="bib.txt" class="external-link button is-normal is-rounded light-btn btn-font"><span class="icon"><i class="fa fa-quote-left"></i></span><span class="sansfont">Cite</span></a></span>
+            </div>
+            </div>
+        </div>
+    </div>
+
+
+    <section id="Abstract">
+        <div class="title">Abstract</div>
+        <div class="description">
+            <p><strong>TL;DR:</strong> We propose a novel method to scale up the data for 3D-free video re-shooting.</p>
+            <p>Video re-shooting aims to regenerate videos with controllable camera motion and viewpoint. Existing methods rely on explicit 3D priors, which are limited by reconstruction quality and often perform poorly when synthesizing previously unseen regions, or on paired videos with different camera trajectories, whose scarcity hinders generalization. We revisit video re-shooting through text-driven semantic viewpoint specification, enabling control over shot scale, viewing angle, and first-/third-person perspective. To this end, we propose TARS, a 3D-free video re-shooting paradigm. Timestep-wise sensitivity analysis reveals that camera motion is primarily established during high-noise stages, where coarse spatiotemporal structures are formed. Based on this insight, we introduce self-supervised training to learn camera dynamics and fundamental visual representations without paired re-shooting data. Through data scaling and joint textual-camera conditioning, TARS supports robust camera and viewpoint control, plausibly synthesizing regions beyond the source view under large camera motions while enabling reverse-angle re-shooting and perspective switching. Extensive experiments show that TARS provides more accurate and temporally consistent camera control than prior methods while requiring minimal paired data.</p>
+        </div>
+    </section>
+
+    <div id="tars-cases">
+        <section id="Camera-Trajectory-Control">
+            <div class="title">Camera Trajectory Control</div>
+            <div class="category-desc fade-in-element">
+                TARS learns camera dynamics at the timesteps where coarse spatiotemporal structure is formed, supporting robust control under large camera motions.
+            </div>
+            <div class="carousel-container fade-in-element">
+                <div class="carousel-arrow left-arrow"><i class="fas fa-chevron-left"></i></div>
+                <div class="carousel-item"><div class="case-placeholder" data-case-slot="trajectory-01">TARS case slot<br><small>case/trajectory-01.mp4</small></div></div>
+                <div class="carousel-item"><div class="case-placeholder" data-case-slot="trajectory-02">TARS case slot<br><small>case/trajectory-02.mp4</small></div></div>
+                <div class="carousel-item"><div class="case-placeholder" data-case-slot="trajectory-03">TARS case slot<br><small>case/trajectory-03.mp4</small></div></div>
+                <div class="carousel-arrow right-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+        </section>
+
+        <section id="Semantic-Viewpoint-Control">
+            <div class="title">Semantic Viewpoint Control</div>
+            <div class="category-desc fade-in-element">
+                Text-driven semantic viewpoint specification enables controllable shot scale and viewing angle without explicit 3D reconstruction.
+            </div>
+            <div class="carousel-container fade-in-element">
+                <div class="carousel-arrow left-arrow"><i class="fas fa-chevron-left"></i></div>
+                <div class="carousel-item"><div class="case-placeholder" data-case-slot="viewpoint-01">TARS case slot<br><small>case/viewpoint-01.mp4</small></div></div>
+                <div class="carousel-item"><div class="case-placeholder" data-case-slot="viewpoint-02">TARS case slot<br><small>case/viewpoint-02.mp4</small></div></div>
+                <div class="carousel-item"><div class="case-placeholder" data-case-slot="viewpoint-03">TARS case slot<br><small>case/viewpoint-03.mp4</small></div></div>
+                <div class="carousel-arrow right-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+        </section>
+
+        <section id="Reverse-Angle-Reshooting">
+            <div class="title">Reverse-Angle Re-shooting</div>
+            <div class="category-desc fade-in-element">
+                TARS plausibly synthesizes regions beyond the source view under substantial viewpoint changes, including reverse-angle re-shooting.
+            </div>
+            <div class="carousel-container fade-in-element">
+                <div class="carousel-arrow left-arrow"><i class="fas fa-chevron-left"></i></div>
+                <div class="carousel-item"><div class="case-placeholder" data-case-slot="reverse-angle-01">TARS case slot<br><small>case/reverse-angle-01.mp4</small></div></div>
+                <div class="carousel-item"><div class="case-placeholder" data-case-slot="reverse-angle-02">TARS case slot<br><small>case/reverse-angle-02.mp4</small></div></div>
+                <div class="carousel-item"><div class="case-placeholder" data-case-slot="reverse-angle-03">TARS case slot<br><small>case/reverse-angle-03.mp4</small></div></div>
+                <div class="carousel-arrow right-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+        </section>
+
+        <section id="Perspective-Switching">
+            <div class="title">Perspective Switching</div>
+            <div class="category-desc fade-in-element">
+                Joint textual-camera conditioning enables first-person and third-person perspective switching with temporally consistent camera control.
+            </div>
+            <div class="carousel-container fade-in-element">
+                <div class="carousel-arrow left-arrow"><i class="fas fa-chevron-left"></i></div>
+                <div class="carousel-item"><div class="case-placeholder" data-case-slot="perspective-01">TARS case slot<br><small>case/perspective-01.mp4</small></div></div>
+                <div class="carousel-item"><div class="case-placeholder" data-case-slot="perspective-02">TARS case slot<br><small>case/perspective-02.mp4</small></div></div>
+                <div class="carousel-item"><div class="case-placeholder" data-case-slot="perspective-03">TARS case slot<br><small>case/perspective-03.mp4</small></div></div>
+                <div class="carousel-arrow right-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Inert template reference: retained only to preserve the original page's reusable case markup. -->
+    <template id="omnidirector-template-reference">
+    <div id="Top-Cases-Section">
+        <section id="Dynamic-Motion-Top">
+            <div class="title">Dynamic Motion</div>
+            <div class="category-desc fade-in-element">
+                OmniDirector masters extreme, high-difficulty camera maneuvers that go far beyond conventional pans and tilts. It can soar into the sky and dive underground, executing breathtaking aerial fly-throughs and dramatic descents while faithfully preserving scene geometry and visual fidelity. Left is the reference, and right is the generated result.
+            </div>
+            
+            <div class="carousel-container fade-in-element">
+                <div class="carousel-arrow left-arrow"><i class="fas fa-chevron-left"></i></div>
+                <div class="carousel-item">
+                    <video playsinline controls loop preload="none" data-poster="camera/dynamic_motion/cameraMotionTransfer_one_shot_hard_102.webp" data-src="camera/dynamic_motion/cameraMotionTransfer_one_shot_hard_102.mp4"></video>
+                </div>
+                <div class="carousel-item">
+                    <video playsinline controls loop preload="none" data-poster="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_15.webp" data-src="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_15.mp4"></video>
+                </div>
+                <div class="carousel-item">
+                    <video playsinline controls loop preload="none" data-poster="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_31%20%283%29.webp" data-src="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_31%20%283%29.mp4"></video>
+                </div>
+                <div class="carousel-arrow right-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+        </section>
+        
+        <section id="Multi-Shot-Top">
+            <div class="title">Multi Shot</div>
+            <div class="category-desc fade-in-element">
+                OmniDirector supports multi-shot generation with coherent transitions and consistent content, while faithfully replicating camera relationships and shot compositions to preserve the original visual language across shots. Left is the reference, and right is the generated result.
+            </div>
+            
+            <div class="carousel-container fade-in-element">
+                <div class="carousel-arrow left-arrow"><i class="fas fa-chevron-left"></i></div>
+                <div class="carousel-item">
+                    <video playsinline controls loop preload="none" data-poster="camera/multi_shot/33401586079.webp" data-src="camera/multi_shot/33401586079.mp4"></video>
+                </div>
+                <div class="carousel-item">
+                    <video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot104%20%281%29.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot104%20%281%29.mp4"></video>
+                </div>
+                <div class="carousel-item">
+                    <video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_118%281%29.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_118%281%29.mp4"></video>
+                </div>
+                <div class="carousel-arrow right-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+        </section>
+
+        <section id="Scene-Generalization-Top" style="margin-top: 100px;">
+            <div class="title">Scene Generalization</div>
+            <div class="category-desc fade-in-element">
+                OmniDirector demonstrates strong scene generalization, extending its capabilities across diverse domains including portraits, animals, wildlife, architecture, and AIGC content, ensuring robust performance without domain-specific constraints. Left is the reference, and right is the generated result.
+            </div>
+            
+            <div class="carousel-container fade-in-element">
+                <div class="carousel-arrow left-arrow"><i class="fas fa-chevron-left"></i></div>
+                <div class="carousel-item">
+                    <video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_multi_shot184.webp" data-src="camera/scene_generalization/cameraMotionTransfer_multi_shot184.mp4"></video>
+                </div>
+                <div class="carousel-item">
+                    <video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_multi_shot_hard_14%20%282%29.webp" data-src="camera/scene_generalization/cameraMotionTransfer_multi_shot_hard_14%20%282%29.mp4"></video>
+                </div>
+                <div class="carousel-item">
+                    <video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_multi_shot_hard_30.webp" data-src="camera/scene_generalization/cameraMotionTransfer_multi_shot_hard_30.mp4"></video>
+                </div>
+                <div class="carousel-arrow right-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+        </section>
+
+        <section id="Special-Camera-Movement-Top">
+            <div class="title">Special Camera Movement</div>
+            <div class="category-desc fade-in-element">
+                OmniDirector supports special camera techniques, including the Hitchcock zoom (dolly zoom), bullet time, and lens distortion effects. Left is the reference, and right is the generated result.
+            </div>
+            
+            <div class="carousel-container fade-in-element">
+                <div class="carousel-arrow left-arrow"><i class="fas fa-chevron-left"></i></div>
+                <div class="carousel-item">
+                    <video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot21%20%283%29.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot21%20%283%29.mp4"></video>
+                </div>
+                <div class="carousel-item">
+                    <video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_74.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_74.mp4"></video>
+                </div>
+                <div class="carousel-item">
+                    <video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_220.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_220.mp4"></video>
+                </div>
+                <div class="carousel-arrow right-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+        </section>
+    </div>
+
+    <div id="More-Cases-Section">
+        <section id="More-Cases-Transition" class="fade-in-element" style="margin-top: 150px; text-align: center; margin-bottom: 50px;">
+            <h2 style="font-size: 3rem; font-weight: 300; color: #fff; margin-bottom: 10px;">More Cases Exploration</h2>
+            <p style="color: #999; font-size: 1.2rem;">Dive deeper into the generated multi-clip results with no bounding constraints.</p>
+        </section>
+
+        <section id="Dynamic-Motion-More">
+            <div class="title" style="font-size: 24px; color: #ccc;">More: Dynamic Motion</div>
+            <div class="category-desc fade-in-element" style="padding: 10px 20px; font-size: 1.05rem; margin-bottom: 20px;">
+                Left is the reference, and right is the generated result.
+            </div>
+            <div class="peek-container">
+                <div class="staggered-grid">
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_29.webp" data-src="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_29.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_34%20%282%29.webp" data-src="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_34%20%282%29.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_10%20%282%29.webp" data-src="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_10%20%282%29.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_2.webp" data-src="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_2.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_26.webp" data-src="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_26.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_23%20%283%29.webp" data-src="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_23%20%283%29.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_36%20%282%29.webp" data-src="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_36%20%282%29.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_12%20%281%29.webp" data-src="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_12%20%281%29.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_21%20%281%29.webp" data-src="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_21%20%281%29.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_28.webp" data-src="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_28.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element force-right"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_33%20%281%29.webp" data-src="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_33%20%281%29.mp4"></video></div></div>
+                </div>
+                <div class="peek-overlay"></div>
+            </div>
+            <div class="show-more-wrapper fade-in-element">
+                <button class="show-more-btn">Show More Cases <i class="fas fa-chevron-down"></i></button>
+            </div>
+        </section>
+
+        <section id="Multi-Shot-More">
+            <div class="title" style="font-size: 24px; color: #ccc;">More: Multi Shot</div>
+            <div class="category-desc fade-in-element" style="padding: 10px 20px; font-size: 1.05rem; margin-bottom: 20px;">
+                Left is the reference, and right is the generated result.
+            </div>
+            <div class="peek-container">
+                <div class="staggered-grid">
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot44%20%281%29.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot44%20%281%29.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot16%20%281%29.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot16%20%281%29.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_20.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_20.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_58%20%282%29.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_58%20%282%29.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/4105392481.webp" data-src="camera/multi_shot/4105392481.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot131%20%281%29.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot131%20%281%29.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot196.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot196.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot47.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot47.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_121%281%29.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_121%281%29.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_45.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_45.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_76.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_76.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot100%20%281%29.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot100%20%281%29.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot157.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot157.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot36%20%282%29.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot36%20%282%29.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_1%20%281%29.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_1%20%281%29.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_13%20%281%29.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_13%20%281%29.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element force-right"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_56.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_56.mp4"></video></div></div>
+                </div>
+                <div class="peek-overlay"></div>
+            </div>
+            <div class="show-more-wrapper fade-in-element">
+                <button class="show-more-btn">Show More Cases <i class="fas fa-chevron-down"></i></button>
+            </div>
+        </section>
+
+        <section id="Scene-Generalization-More">
+            <div class="title" style="font-size: 24px; color: #ccc;">More: Scene Generalization</div>
+            <div class="category-desc fade-in-element" style="padding: 10px 20px; font-size: 1.05rem; margin-bottom: 20px;">
+                Left is the reference, and right is the generated result.
+            </div>
+            <div class="peek-container">
+                <div class="staggered-grid">
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot193.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot193.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot494.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot494.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot295.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot295.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot313.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot313.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot393.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot393.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot_hard_63.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot_hard_63.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot_hard_76.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot_hard_76.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new_289.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new_289.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new__259.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new__259.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new__58.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new__58.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_multi_shot56%20%281%29.webp" data-src="camera/scene_generalization/cameraMotionTransfer_multi_shot56%20%281%29.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_multi_shot_hard_18.webp" data-src="camera/scene_generalization/cameraMotionTransfer_multi_shot_hard_18.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_multi_shot_hard_34-.webp" data-src="camera/scene_generalization/cameraMotionTransfer_multi_shot_hard_34-.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot258.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot258.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot307.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot307.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot343.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot343.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot_hard_65.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot_hard_65.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new_263.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new_263.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new_308.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new_308.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new__267.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new__267.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_multi_shot_hard_12.webp" data-src="camera/scene_generalization/cameraMotionTransfer_multi_shot_hard_12.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_multi_shot_hard_24%20%281%29.webp" data-src="camera/scene_generalization/cameraMotionTransfer_multi_shot_hard_24%20%281%29.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_multi_shot_hard_46.webp" data-src="camera/scene_generalization/cameraMotionTransfer_multi_shot_hard_46.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot282.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot282.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot312.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot312.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot385.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot385.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot_hard_58.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot_hard_58.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot_hard_7%20%281%29.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot_hard_7%20%281%29.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new_284.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new_284.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new_8.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new_8.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element force-right"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new__295.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new__295.mp4"></video></div></div>
+                </div>
+                <div class="peek-overlay"></div>
+            </div>
+            <div class="show-more-wrapper fade-in-element">
+                <button class="show-more-btn">Show More Cases <i class="fas fa-chevron-down"></i></button>
+            </div>
+        </section>
+        
+        <section id="Special-Camera-Movement-More">
+            <div class="title" style="font-size: 24px; color: #ccc;">More: Special Camera Movement</div>
+            <div class="category-desc fade-in-element" style="padding: 10px 20px; font-size: 1.05rem; margin-bottom: 20px;">
+                Left is the reference, and right is the generated result.
+            </div>
+            <div class="peek-container">
+                <div class="staggered-grid">
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_299.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_299.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_11.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_11.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_32%20%282%29.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_32%20%282%29.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_123.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_123.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_243.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_243.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_304.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_304.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_85.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_85.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_1.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_1.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_211.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_211.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_265.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_265.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_305.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_305.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new__281.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new__281.mp4"></video></div></div>
+                </div>
+                <div class="peek-overlay"></div>
+            </div>
+            <div class="show-more-wrapper fade-in-element">
+                <button class="show-more-btn">Show More Cases <i class="fas fa-chevron-down"></i></button>
+            </div>
+        </section>
+    </div>
+    
+    <section id="Comparisons-More" style="margin-bottom: 80px;">
+        <div class="title" style="font-size: 24px; color: #ccc;">More: Comparisons</div>
+        <div class="category-desc fade-in-element">
+            Side-by-side performance comparison against other state-of-the-art camera control methods, where the leftmost column shows the reference images. OmniDirector exhibits superior control stability and minimal object distortion. Left is the reference, and right is the generated result.
+        </div>
+        <div class="carousel-container fade-in-element">
+            <div class="carousel-arrow left-arrow"><i class="fas fa-chevron-left"></i></div>
+            <div class="carousel-item">
+                <video playsinline controls loop preload="none" data-poster="camera/compare/2.webp" data-src="camera/compare/2.mp4"></video>
+            </div>
+            <div class="carousel-item">
+                <video playsinline controls loop preload="none" data-poster="camera/compare/3.webp" data-src="camera/compare/3.mp4"></video>
+            </div>
+            <div class="carousel-item">
+                <video playsinline controls loop preload="none" data-poster="camera/compare/4.webp" data-src="camera/compare/4.mp4"></video>
+            </div>
+            <div class="carousel-item">
+                <video playsinline controls loop preload="none" data-poster="camera/compare/1.webp" data-src="camera/compare/1.mp4"></video>
+            </div>
+            <div class="carousel-arrow right-arrow"><i class="fas fa-chevron-right"></i></div>
+        </div>
+    </section>
+    
+    </template>
+
+    <section id="Pipeline">
+        <div class="title">Method Overview</div>
+        <div class="pipeline-placeholder">
+            TARS method figure will appear here.<br>
+            <small>Place the final overview image at <code>image/overall.png</code> when it is ready.</small>
+        </div>
+        <div class="description">
+            TARS identifies the high-noise diffusion stages that establish camera motion, then uses self-supervised learning and data scaling to acquire camera dynamics and fundamental visual representations without requiring paired re-shooting data. Joint textual-camera conditioning supports controllable video re-shooting across camera trajectory, viewpoint, and perspective.
+        </div>
+    </section>
+
+    <section id="Acknowledgement">
+        <div class="title">Acknowledgement</div>
+        <div class="description">
+            Acknowledgements will be added with the final paper release.
+        </div>
+    </section>
+
+    <section id="ethical-considerations">
+        <div class="title">Responsible Use Statement</div>
+        <div class="description">
+            The examples on this page are intended solely to communicate research results on controllable video re-shooting. We will use only materials that are authorized for research demonstration and will update or remove any example when a valid concern is raised.
+        </div>
+    </section>
+
+    <section id="BibTeX">
+        <div class="title">BibTeX</div>
+        <pre style="text-align: left; margin-left: 0%; margin-right: 0%; white-space: pre-wrap; word-wrap: break-word; font-size: 14px; line-height: 1.4;">
+<code>
+@article{liu2026tars,
+  title={TARS: Timestep-Aware Data Scaling for 3D-Free Video Re-Shooting},
+  author={Liu, Jiwen and Li, Shujuan and Li, Xiaohan and Meng, Zijie and Liu, Xinyue and Xu, Yulong and Zhou, Yan and Zhang, Guoxin},
+  year={2026}
+}
+
+</code></pre>
+    </section>
+
+    <div class="copyright-footer">
+        &copy; 2026 TARS authors. All rights reserved.
+    </div>
+
+    <script>
+        // const overlay = document.getElementById('password-overlay');
+        // const passInput = document.getElementById('password-input');
+        // const passSubmit = document.getElementById('password-submit');
+        // const passError = document.getElementById('password-error');
+        // function checkPassword() {
+        //     if (passInput.value === '1') { overlay.style.display = 'none'; document.body.style.overflow = 'auto'; } 
+        //     else { passError.style.display = 'block'; }
+        // }
+        // if (overlay) {
+        //     passSubmit.addEventListener('click', checkPassword);
+        //     passInput.addEventListener('keypress', function(e) { if (e.key === 'Enter') checkPassword(); });
+        //     document.body.style.overflow = 'hidden';
+        // }
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            /* ---------------------------------------------------- */
+            /* 1. 全新顶级导航栏滚动指示 (ScrollSpy) Logic          */
+            /* ---------------------------------------------------- */
+            const navSections = [
+                { id: 'intro', element: document.querySelector('#intro') },
+                { id: 'Abstract', element: document.querySelector('#Abstract') },
+                { id: 'tars-cases', element: document.querySelector('#tars-cases') },
+                { id: 'Pipeline', element: document.querySelector('#Pipeline') },
+                { id: 'Acknowledgement', element: document.querySelector('#Acknowledgement') },
+                { id: 'ethical-considerations', element: document.querySelector('#ethical-considerations') },
+                { id: 'BibTeX', element: document.querySelector('#BibTeX') }
+            ];
+            const topNavLinks = document.querySelectorAll('.top-nav-link');
+
+            window.addEventListener('scroll', () => {
+                let current = 'intro';
+                navSections.forEach(sec => {
+                    if (!sec.element) return;
+                    const rect = sec.element.getBoundingClientRect();
+                    if (rect.top <= 120 && rect.bottom > 120) {
+                        current = sec.id;
+                    }
+                });
+
+                if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 10) {
+                    current = 'BibTeX';
+                }
+
+                topNavLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+
+
+            /* ---------------------------------------------------- */
+            /* 2. 重写升级：兼容 3 或 4个视频的 3D 轮播图控制系统   */
+            /* ---------------------------------------------------- */
+            document.querySelectorAll('.carousel-container').forEach(container => {
+                let items = Array.from(container.querySelectorAll('.carousel-item'));
+                let states = [];
+                
+                if (items.length === 3) {
+                    states = ['pos-left', 'pos-center', 'pos-right'];
+                } else if (items.length === 4) {
+                    states = ['pos-left', 'pos-center', 'pos-right', 'pos-hidden'];
+                }
+
+                function applyStates() {
+                    items.forEach((item, index) => {
+                        item.className = 'carousel-item ' + states[index];
+                    });
+                }
+
+                function nextItem() { states.unshift(states.pop()); applyStates(); }
+                function prevItem() { states.push(states.shift()); applyStates(); }
+
+                container.querySelector('.left-arrow').addEventListener('click', (e) => { e.stopPropagation(); prevItem(); });
+                container.querySelector('.right-arrow').addEventListener('click', (e) => { e.stopPropagation(); nextItem(); });
+
+                items.forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        if (item.classList.contains('pos-left')) prevItem();
+                        if (item.classList.contains('pos-right')) nextItem();
+                    });
+                });
+
+                let startX = 0; let isDragging = false;
+                container.addEventListener('touchstart', e => { startX = e.touches[0].clientX; isDragging = true; }, {passive: true});
+                container.addEventListener('touchend', e => {
+                    if(!isDragging) return;
+                    let endX = e.changedTouches[0].clientX;
+                    if(endX < startX - 50) nextItem();  
+                    if(endX > startX + 50) prevItem(); 
+                    isDragging = false;
+                });
+                
+                container.addEventListener('mousedown', e => { startX = e.clientX; isDragging = true; });
+                container.addEventListener('mouseup', e => {
+                    if(!isDragging) return;
+                    let endX = e.clientX;
+                    if(endX < startX - 50) nextItem();  
+                    if(endX > startX + 50) prevItem(); 
+                    isDragging = false;
+                });
+
+                applyStates();
+            });
+
+            /* ---------------------------------------------------- */
+            /* 2.5 全新定制：严格左右排布按高度分配的 JS 瀑布流（支持手动强制左右） */
+            /* ---------------------------------------------------- */
+            document.querySelectorAll('.staggered-grid').forEach(grid => {
+                const items = Array.from(grid.querySelectorAll('.staggered-item'));
+                
+                const leftCol = document.createElement('div');
+                leftCol.className = 'masonry-col left-col';
+                const rightCol = document.createElement('div');
+                rightCol.className = 'masonry-col right-col';
+                
+                grid.innerHTML = '';
+                grid.appendChild(leftCol);
+                grid.appendChild(rightCol);
+
+                items.forEach((item) => {
+                    // --- 新增：手动强制分配逻辑 ---
+                    if (item.classList.contains('force-left')) {
+                        leftCol.appendChild(item);
+                        return; // 跳过后续自动平衡逻辑
+                    }
+                    if (item.classList.contains('force-right')) {
+                        rightCol.appendChild(item);
+                        return; // 跳过后续自动平衡逻辑
+                    }
+                    // --------------------------
+
+                    let lh = leftCol.offsetHeight;
+                    let rh = rightCol.offsetHeight;
+                    let lc = leftCol.children.length;
+                    let rc = rightCol.children.length;
+
+                    // 原有的自动平衡逻辑
+                    if (lc === rc) {
+                        if (lh <= rh) {
+                            leftCol.appendChild(item);
+                        } else {
+                            rightCol.appendChild(item);
+                        }
+                    } else if (lc < rc) {
+                        leftCol.appendChild(item);
+                    } else {
+                        rightCol.appendChild(item);
+                    }
+                });
+            });
+
+            /* ---------------------------------------------------- */
+            /* 3. 【极客级核心】带局部性空间缓存预测的单例按需加载  */
+            /* ---------------------------------------------------- */
+            window.activeVideo = null; 
+            
+            // 新增：维护智能预加载队列与缓存记录的全局变量
+            window.preloadedUrls = new Set();
+            window.preloadController = null;
+            window.preloadQueue = [];
+            window.isPreloading = false;
+
+            // 切断由于用户点击而失效的后台预加载流
+            function abortPreloading() {
+                if (window.preloadController) {
+                    window.preloadController.abort();
+                }
+                window.isPreloading = false;
+                window.preloadQueue = [];
+            }
+
+            // 【隐匿缓存机制的核心】利用 HTTP Range 请求预拉取视频头部，存入浏览器原生磁盘缓存
+            async function processNextPreload() {
+                if (!window.isPreloading || window.preloadQueue.length === 0) return;
+                const video = window.preloadQueue.shift();
+                
+                const originalSrc = video.dataset.src;
+
+                // 跳过已被标记缓存、已正在播放的文件
+                if (window.preloadedUrls.has(originalSrc) || video.getAttribute('src')) {
+                    processNextPreload();
+                    return;
+                }
+
+                try {
+                    // 只拉取视频头部数据（前 500KB），自动存入浏览器磁盘缓存
+                    const response = await fetch(originalSrc, { 
+                        signal: window.preloadController.signal,
+                        headers: { 'Range': 'bytes=0-500000' }
+                    });
+                    
+                    if (!response.ok && response.status !== 206) throw new Error('Network response not ok');
+                    
+                    // 标记该 URL 已经预热过，不需要转 blob，也不需要修改 dataset.src
+                    window.preloadedUrls.add(originalSrc);
+
+                    processNextPreload(); // 递归，继续加载下一个
+                } catch (err) {
+                    // 若是被 abortPreloading 中断的，直接停机即可；若是网络波动等其他原因，直接跳过并处理下一个
+                    if (err.name !== 'AbortError') {
+                        processNextPreload(); 
+                    }
+                }
+            }
+
+            // 核心算法：加载该视频下面的视频，如果加载到最后一个，则从头开始加载之前的视频，直到全部加载完毕
+            function startPreloading(centerVideo) {
+                abortPreloading();
+                window.preloadController = new AbortController();
+                window.isPreloading = true;
+
+                const allVideos = Array.from(document.querySelectorAll('video[data-src]'));
+                const centerIndex = allVideos.indexOf(centerVideo);
+                
+                if (centerIndex === -1) return;
+
+                const orderedVideos = [];
+                // 1. 从当前视频的下一个开始，一直到末尾
+                for (let i = centerIndex + 1; i < allVideos.length; i++) {
+                    orderedVideos.push(allVideos[i]);
+                }
+                // 2. 到达末尾后折返回开头，加载当前视频前面的所有视频
+                for (let i = 0; i < centerIndex; i++) {
+                    orderedVideos.push(allVideos[i]);
+                }
+
+                // 筛选掉已经拥有 src 、已被缓存的视频
+                window.preloadQueue = orderedVideos.filter(v => 
+                    !v.getAttribute('src') && !window.preloadedUrls.has(v.dataset.src)
+                );
+
+                processNextPreload();
+            }
+
+            const fadeObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    const el = entry.target;
+                    if (entry.isIntersecting) {
+                        el.classList.add('visible'); 
+
+                        const videos = el.querySelectorAll('video[data-src]');
+                        videos.forEach(video => {
+                            if (video.dataset.poster && !video.poster) {
+                                video.poster = video.dataset.poster;
+                            }
+
+                            if (!video.dataset.clickBinded) {
+                                video.dataset.clickBinded = "true";
+                                
+                                const parent = video.parentElement;
+                                
+                                const playBtn = document.createElement('div');
+                                playBtn.className = 'custom-play-overlay';
+                                playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                                parent.appendChild(playBtn);
+                                
+                                const onClick = function(e) {
+                                    if (parent.classList.contains('pos-left') || parent.classList.contains('pos-right') || parent.classList.contains('pos-hidden')) {
+                                        return;
+                                    }
+
+                                    if (video.getAttribute('src')) {
+                                        return;
+                                    }
+
+                                    // 【改动点1】任何用户主动点击，立刻中止后台所有潜行的预加载任务，将带宽100%让给当前点击事件！
+                                    abortPreloading();
+
+                                    if (window.activeVideo && window.activeVideo !== video) {
+                                        window.activeVideo.pause();
+                                        window.activeVideo.removeAttribute('src'); 
+                                        window.activeVideo.load(); 
+                                        window.activeVideo.parentElement.classList.remove('is-playing');
+                                    }
+                                    
+                                    video.src = video.dataset.src; // 若已在后台 fetch 过，浏览器会自动命中 206 磁盘缓存，相当于秒开
+                                    video.load();
+                                    parent.classList.add('is-playing');
+                                    
+                                    const playPromise = video.play();
+                                    if (playPromise !== undefined) {
+                                        playPromise.catch(err => { console.warn("Auto-play prevented", err); });
+                                    }
+                                    
+                                    window.activeVideo = video;
+
+                                    // 【改动点2】当当前视频在底层加载出足够数据可以连续播放后，触发顺位视频的静默预加载
+                                    const checkAndPreload = () => {
+                                        if (window.activeVideo === video) {
+                                            startPreloading(video);
+                                        }
+                                    };
+
+                                    if (video.readyState >= 3) { // HAVE_FUTURE_DATA 或更高
+                                        checkAndPreload();
+                                    } else {
+                                        video.addEventListener('canplaythrough', function handler() {
+                                            checkAndPreload();
+                                            video.removeEventListener('canplaythrough', handler);
+                                        });
+                                    }
+                                };
+                                
+                                parent.addEventListener('click', onClick);
+                            }
+                        });
+                    } else {
+                        el.classList.remove('visible');
+                    }
+                });
+            }, { root: null, rootMargin: "-5% 0px -5% 0px", threshold: 0.1 });
+
+            document.querySelectorAll('.fade-in-element').forEach(el => fadeObserver.observe(el));
+
+
+            /* ---------------------------------------------------- */
+            /* 4. Show More 每次保留一半的“窥探式”伸展逻辑          */
+            /* ---------------------------------------------------- */
+            document.querySelectorAll('.show-more-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const wrapper = btn.closest('.show-more-wrapper');
+                    const container = wrapper.previousElementSibling; 
+                    
+                    let currentHeight = parseInt(window.getComputedStyle(container).maxHeight);
+                    let newHeight = currentHeight + 490; 
+                    
+                    container.style.maxHeight = newHeight + "px";
+                    
+                    // 如果已经撑到最大高度了，或者接近最大高度了
+                    if (newHeight >= (container.scrollHeight - 100)) {
+                        // 【关键修改】直接设为 none，彻底解除高度封印，这样就不会切掉视频了
+                        container.style.maxHeight = "none"; 
+                        container.classList.add('fully-expanded'); 
+                        wrapper.style.display = 'none'; 
+                    }
+                });
+            });
+
+        });
+    </script>
+</body>
+</html>

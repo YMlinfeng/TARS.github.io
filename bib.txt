@@ -1,0 +1,5 @@
+@article{liu2026tars,
+  title={TARS: Timestep-Aware Data Scaling for 3D-Free Video Re-Shooting},
+  author={Liu, Jiwen and Li, Shujuan and Li, Xiaohan and Meng, Zijie and Liu, Xinyue and Xu, Yulong and Zhou, Yan and Zhang, Guoxin},
+  year={2026}
+}

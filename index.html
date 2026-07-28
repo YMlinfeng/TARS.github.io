@@ -248,15 +248,15 @@
         .fade-in-element { opacity: 0; transform: translateY(40px); transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1), transform 1s cubic-bezier(0.25, 1, 0.5, 1); will-change: opacity, transform; }
         .fade-in-element.visible { opacity: 1; transform: translateY(0); }
 
-        /* The template's OmniDirector demos stay in the source for reuse but are not rendered on TARS. */
-        #Top-Cases-Section, #More-Cases-Section, #Comparisons-More { display: none; }
-        #tars-cases { margin-top: 0; }
+        /* Keep the complete original project-page structure visible while cases are being prepared. */
         .case-placeholder {
-            min-height: 280px; display: flex; align-items: center; justify-content: center;
+            width: 100%; box-sizing: border-box; min-height: 280px; display: flex; align-items: center; justify-content: center;
             padding: 30px; text-align: center; color: #aaa; font-size: 1.1rem; line-height: 1.6;
             border: 1px dashed #4f5c52; border-radius: 12px;
             background: linear-gradient(135deg, rgba(116, 255, 82, 0.08), rgba(255,255,255,0.015));
         }
+        .carousel-item .case-placeholder { min-height: 350px; }
+        .staggered-item .case-placeholder { min-height: 220px; aspect-ratio: 16 / 9; }
         .pipeline-placeholder {
             min-height: 320px; display: flex; align-items: center; justify-content: center;
             padding: 40px; margin: 20px auto; max-width: 95%; text-align: center;
@@ -273,8 +273,8 @@
     <!-- 顶部横向响应式 ScrollSpy 导航栏 -->
     <nav id="top-nav">
         <a href="#intro" class="top-nav-link active">Home</a>
-        <a href="#Abstract" class="top-nav-link">Abstract</a>
-        <a href="#tars-cases" class="top-nav-link">Cases</a>
+        <a href="#Top-Cases-Section" class="top-nav-link">Top Cases</a>
+        <a href="#More-Cases-Section" class="top-nav-link">More Cases</a>
         <a href="#Pipeline" class="top-nav-link">Pipeline</a>
         <a href="#Acknowledgement" class="top-nav-link">Acknowledgement</a>
         <a href="#ethical-considerations" class="top-nav-link">Responsible Use</a>
@@ -304,9 +304,33 @@
             <div style="margin-top: 75px;"></div>
             
             <div class="publication-links" style="position: relative; z-index: 2000; transform: scale(1.2); transform-origin: center center; margin-left: -20px;">
-                <span class="link-block"><a href="#Abstract" class="external-link button is-normal is-rounded light-btn btn-font"><span class="icon"><i class="fas fa-file-lines"></i></span><span class="sansfont">Abstract</span></a></span>
-                <span class="link-block"><a href="https://github.com/YMlinfeng/TARS.github.io" target="_blank" rel="noopener noreferrer" class="external-link button is-normal is-rounded light-btn btn-font"><span class="icon"><i class="fa fa-code" aria-hidden="true"></i></span><span class="sansfont">Project</span></a></span>
+                <span class="link-block"><a href="https://arxiv.org/abs/2606.13432" class="external-link button is-normal is-rounded light-btn btn-font"><span class="icon"><i class="fas fa-file-pdf"></i></span><span class="sansfont">Paper</span></a></span>
+                <span class="link-block"><a href="https://github.com/lisj575/OmniDirector" target="_blank" class="external-link button is-normal is-rounded light-btn btn-font"><span class="icon"><i class="fa fa-database" aria-hidden="true"></i></span><span class="sansfont">Code</span></a></span>
                 <span class="link-block"><a href="bib.txt" class="external-link button is-normal is-rounded light-btn btn-font"><span class="icon"><i class="fa fa-quote-left"></i></span><span class="sansfont">Cite</span></a></span>
+                <span class="link-block" style="position: relative; display: inline-block; z-index: 2000;">
+                    <a href="javascript:void(0);" class="external-link button is-normal is-rounded light-btn btn-font" id="nav-button-research">
+                        <span class="icon"><i class="fas fa-microscope"></i></span><span class="sansfont">More Research</span>
+                    </a>
+                    <div id="dropdown-menu-research" class="dropdown-menu" style="display:none; position:absolute; top:100%; left:50%; transform:translateX(-50%); background-color:#333; border-radius:6px; padding:4px 0; margin-top:6px; min-width:240px; max-width:280px; max-height:140px; overflow-y:auto; font-size:14px; z-index:3000; white-space:nowrap; box-shadow: 0 10px 25px rgba(0,0,0,0.8);">
+                        <a href="https://huggingface.co/papers/2603.03160" target="_blank" class="dropdown-item" style="display:block; padding:6px 15px; color:white; text-decoration:none;">Kling-MotionControl</a>
+                        <a href="https://camclonemaster.github.io/" target="_blank" class="dropdown-item" style="display:block; padding:6px 15px; color:white; text-decoration:none;">CamCloneMaster</a>
+                        <a href="https://ziqiaopeng.github.io/OmniSync/" target="_blank" class="dropdown-item" style="display:block; padding:6px 15px; color:white; text-decoration:none;">OmniSync</a>
+                        <a href="https://arxiv.org/abs/2606.11670" target="_blank" class="dropdown-item" style="display:block; padding:6px 15px; color:white; text-decoration:none;">ARGUS</a>
+                        <a href="https://huggingface.co/papers/2602.03796" target="_blank" class="dropdown-item" style="display:block; padding:6px 15px; color:white; text-decoration:none;">3DiMo</a>
+                        <a href="https://klingavatar.github.io/" target="_blank" class="dropdown-item" style="display:block; padding:6px 15px; color:white; text-decoration:none;">Kling-Avatar</a>
+                        <a href="https://arxiv.org/abs/2512.13313" target="_blank" class="dropdown-item" style="display:block; padding:6px 15px; color:white; text-decoration:none;">Kling-Avatar 2.0</a>
+                        <a href="https://vincenthu19.github.io/GGTalker/" target="_blank" class="dropdown-item" style="display:block; padding:6px 15px; color:white; text-decoration:none;">GGTalker</a>
+                    </div>
+                </span>
+                <style>.dropdown-item:hover { background-color: #555; color: #74ff52 !important; }</style>
+                <script>
+                  const navBtn = document.getElementById("nav-button-research");
+                  const dropdown = document.getElementById("dropdown-menu-research");
+                  if (navBtn) {
+                      navBtn.addEventListener("click", function(e) { e.preventDefault(); dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block"; });
+                      document.addEventListener("click", function(e) { if (!navBtn.contains(e.target) && !dropdown.contains(e.target)) dropdown.style.display = "none"; });
+                  }
+                </script>
             </div>
             </div>
         </div>
@@ -321,6 +345,7 @@
         </div>
     </section>
 
+    <!-- Previous 12-slot draft retained for reference; the complete original layout below is the live case page.
     <div id="tars-cases">
         <section id="Camera-Trajectory-Control">
             <div class="title">Camera Trajectory Control</div>
@@ -378,89 +403,89 @@
             </div>
         </section>
     </div>
+    -->
 
-    <!-- Inert template reference: retained only to preserve the original page's reusable case markup. -->
-    <template id="omnidirector-template-reference">
+    <!-- Restored project-page structure. Every media slot is intentionally a placeholder until TARS videos are provided in case/. -->
     <div id="Top-Cases-Section">
         <section id="Dynamic-Motion-Top">
-            <div class="title">Dynamic Motion</div>
+            <div class="title">Camera Trajectory Control</div>
             <div class="category-desc fade-in-element">
-                OmniDirector masters extreme, high-difficulty camera maneuvers that go far beyond conventional pans and tilts. It can soar into the sky and dive underground, executing breathtaking aerial fly-throughs and dramatic descents while faithfully preserving scene geometry and visual fidelity. Left is the reference, and right is the generated result.
+                Given a source video and a target camera grid, TARS follows the intended camera motion while preserving the subject, action, and scene content. This group is intended for dynamic scenes with challenging camera trajectories. For each example, the left is the reference and the right is the TARS result.
             </div>
             
             <div class="carousel-container fade-in-element">
                 <div class="carousel-arrow left-arrow"><i class="fas fa-chevron-left"></i></div>
                 <div class="carousel-item">
-                    <video playsinline controls loop preload="none" data-poster="camera/dynamic_motion/cameraMotionTransfer_one_shot_hard_102.webp" data-src="camera/dynamic_motion/cameraMotionTransfer_one_shot_hard_102.mp4"></video>
+                    <div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div>
                 </div>
                 <div class="carousel-item">
-                    <video playsinline controls loop preload="none" data-poster="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_15.webp" data-src="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_15.mp4"></video>
+                    <div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div>
                 </div>
                 <div class="carousel-item">
-                    <video playsinline controls loop preload="none" data-poster="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_31%20%283%29.webp" data-src="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_31%20%283%29.mp4"></video>
+                    <div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div>
                 </div>
                 <div class="carousel-arrow right-arrow"><i class="fas fa-chevron-right"></i></div>
             </div>
         </section>
         
         <section id="Multi-Shot-Top">
-            <div class="title">Multi Shot</div>
+            <div class="title">Large-Motion Re-shooting</div>
             <div class="category-desc fade-in-element">
-                OmniDirector supports multi-shot generation with coherent transitions and consistent content, while faithfully replicating camera relationships and shot compositions to preserve the original visual language across shots. Left is the reference, and right is the generated result.
+                Large viewpoint changes expose regions outside the source view. TARS plausibly synthesizes these newly visible contents while retaining source appearance and temporally consistent subject dynamics. For each example, the left is the reference and the right is the TARS result.
             </div>
             
             <div class="carousel-container fade-in-element">
                 <div class="carousel-arrow left-arrow"><i class="fas fa-chevron-left"></i></div>
                 <div class="carousel-item">
-                    <video playsinline controls loop preload="none" data-poster="camera/multi_shot/33401586079.webp" data-src="camera/multi_shot/33401586079.mp4"></video>
+                    <div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div>
                 </div>
                 <div class="carousel-item">
-                    <video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot104%20%281%29.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot104%20%281%29.mp4"></video>
+                    <div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div>
                 </div>
                 <div class="carousel-item">
-                    <video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_118%281%29.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_118%281%29.mp4"></video>
+                    <div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div>
                 </div>
                 <div class="carousel-arrow right-arrow"><i class="fas fa-chevron-right"></i></div>
             </div>
         </section>
 
         <section id="Scene-Generalization-Top" style="margin-top: 100px;">
-            <div class="title">Scene Generalization</div>
+            <div class="title">Text-Guided Viewpoint Control</div>
             <div class="category-desc fade-in-element">
-                OmniDirector demonstrates strong scene generalization, extending its capabilities across diverse domains including portraits, animals, wildlife, architecture, and AIGC content, ensuring robust performance without domain-specific constraints. Left is the reference, and right is the generated result.
+                Text specifies shot scale (close-up, medium shot, and long shot) and viewing angle (front, side, high-angle, and low-angle), enabling semantically controlled re-shooting without a new explicit 3D reconstruction. For each example, the left is the reference and the right is the TARS result.
             </div>
             
             <div class="carousel-container fade-in-element">
                 <div class="carousel-arrow left-arrow"><i class="fas fa-chevron-left"></i></div>
                 <div class="carousel-item">
-                    <video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_multi_shot184.webp" data-src="camera/scene_generalization/cameraMotionTransfer_multi_shot184.mp4"></video>
+                    <div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div>
                 </div>
                 <div class="carousel-item">
-                    <video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_multi_shot_hard_14%20%282%29.webp" data-src="camera/scene_generalization/cameraMotionTransfer_multi_shot_hard_14%20%282%29.mp4"></video>
+                    <div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div>
                 </div>
                 <div class="carousel-item">
-                    <video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_multi_shot_hard_30.webp" data-src="camera/scene_generalization/cameraMotionTransfer_multi_shot_hard_30.mp4"></video>
+                    <div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div>
                 </div>
                 <div class="carousel-arrow right-arrow"><i class="fas fa-chevron-right"></i></div>
             </div>
         </section>
 
         <section id="Special-Camera-Movement-Top">
-            <div class="title">Special Camera Movement</div>
+            <div class="title">Reverse-Angle &amp; Perspective Switching</div>
             <div class="category-desc fade-in-element">
-                OmniDirector supports special camera techniques, including the Hitchcock zoom (dolly zoom), bullet time, and lens distortion effects. Left is the reference, and right is the generated result.
+                TARS supports reverse-angle re-shooting and transitions between first- and third-person perspectives. These cases are particularly suitable for human, animal, driving, and embodied-agent scenes. For each example, the left is the reference and the right is the TARS result.
             </div>
             
             <div class="carousel-container fade-in-element">
                 <div class="carousel-arrow left-arrow"><i class="fas fa-chevron-left"></i></div>
                 <div class="carousel-item">
-                    <video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot21%20%283%29.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot21%20%283%29.mp4"></video>
+                    <div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div>
                 </div>
                 <div class="carousel-item">
-                    <video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_74.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_74.mp4"></video>
+                    <div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div>
                 </div>
                 <div class="carousel-item">
-                    <video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_220.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_220.mp4"></video>
+                    <div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div>
                 </div>
                 <div class="carousel-arrow right-arrow"><i class="fas fa-chevron-right"></i></div>
             </div>
@@ -470,27 +495,27 @@
     <div id="More-Cases-Section">
         <section id="More-Cases-Transition" class="fade-in-element" style="margin-top: 150px; text-align: center; margin-bottom: 50px;">
             <h2 style="font-size: 3rem; font-weight: 300; color: #fff; margin-bottom: 10px;">More Cases Exploration</h2>
-            <p style="color: #999; font-size: 1.2rem;">Dive deeper into the generated multi-clip results with no bounding constraints.</p>
+            <p style="color: #999; font-size: 1.2rem;">Explore additional TARS re-shooting results across trajectory, semantic viewpoint, large-motion, and perspective conditions.</p>
         </section>
 
         <section id="Dynamic-Motion-More">
-            <div class="title" style="font-size: 24px; color: #ccc;">More: Dynamic Motion</div>
+            <div class="title" style="font-size: 24px; color: #ccc;">More: Camera Trajectory Control</div>
             <div class="category-desc fade-in-element" style="padding: 10px 20px; font-size: 1.05rem; margin-bottom: 20px;">
-                Left is the reference, and right is the generated result.
+                Additional trajectory-controlled re-shooting examples. Left is the reference, and right is the TARS result.
             </div>
             <div class="peek-container">
                 <div class="staggered-grid">
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_29.webp" data-src="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_29.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_34%20%282%29.webp" data-src="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_34%20%282%29.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_10%20%282%29.webp" data-src="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_10%20%282%29.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_2.webp" data-src="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_2.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_26.webp" data-src="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_26.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_23%20%283%29.webp" data-src="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_23%20%283%29.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_36%20%282%29.webp" data-src="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_36%20%282%29.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_12%20%281%29.webp" data-src="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_12%20%281%29.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_21%20%281%29.webp" data-src="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_21%20%281%29.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_28.webp" data-src="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_28.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element force-right"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_33%20%281%29.webp" data-src="camera/dynamic_motion/cameraMotionTransfer_one_shot_omini_33%20%281%29.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element force-right"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
                 </div>
                 <div class="peek-overlay"></div>
             </div>
@@ -500,29 +525,29 @@
         </section>
 
         <section id="Multi-Shot-More">
-            <div class="title" style="font-size: 24px; color: #ccc;">More: Multi Shot</div>
+            <div class="title" style="font-size: 24px; color: #ccc;">More: Large-Motion Re-shooting</div>
             <div class="category-desc fade-in-element" style="padding: 10px 20px; font-size: 1.05rem; margin-bottom: 20px;">
-                Left is the reference, and right is the generated result.
+                Additional large-motion cases that reveal regions beyond the source view. Left is the reference, and right is the TARS result.
             </div>
             <div class="peek-container">
                 <div class="staggered-grid">
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot44%20%281%29.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot44%20%281%29.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot16%20%281%29.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot16%20%281%29.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_20.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_20.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_58%20%282%29.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_58%20%282%29.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/4105392481.webp" data-src="camera/multi_shot/4105392481.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot131%20%281%29.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot131%20%281%29.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot196.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot196.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot47.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot47.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_121%281%29.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_121%281%29.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_45.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_45.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_76.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_76.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot100%20%281%29.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot100%20%281%29.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot157.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot157.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot36%20%282%29.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot36%20%282%29.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_1%20%281%29.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_1%20%281%29.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_13%20%281%29.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_13%20%281%29.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element force-right"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_56.webp" data-src="camera/multi_shot/cameraMotionTransfer_multi_shot_hard_56.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element force-right"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
                 </div>
                 <div class="peek-overlay"></div>
             </div>
@@ -532,43 +557,43 @@
         </section>
 
         <section id="Scene-Generalization-More">
-            <div class="title" style="font-size: 24px; color: #ccc;">More: Scene Generalization</div>
+            <div class="title" style="font-size: 24px; color: #ccc;">More: Text-Guided Viewpoint Control</div>
             <div class="category-desc fade-in-element" style="padding: 10px 20px; font-size: 1.05rem; margin-bottom: 20px;">
-                Left is the reference, and right is the generated result.
+                Additional changes in shot scale and viewing angle. Left is the reference, and right is the TARS result.
             </div>
             <div class="peek-container">
                 <div class="staggered-grid">
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot193.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot193.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot494.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot494.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot295.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot295.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot313.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot313.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot393.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot393.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot_hard_63.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot_hard_63.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot_hard_76.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot_hard_76.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new_289.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new_289.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new__259.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new__259.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new__58.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new__58.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_multi_shot56%20%281%29.webp" data-src="camera/scene_generalization/cameraMotionTransfer_multi_shot56%20%281%29.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_multi_shot_hard_18.webp" data-src="camera/scene_generalization/cameraMotionTransfer_multi_shot_hard_18.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_multi_shot_hard_34-.webp" data-src="camera/scene_generalization/cameraMotionTransfer_multi_shot_hard_34-.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot258.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot258.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot307.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot307.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot343.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot343.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot_hard_65.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot_hard_65.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new_263.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new_263.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new_308.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new_308.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new__267.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new__267.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_multi_shot_hard_12.webp" data-src="camera/scene_generalization/cameraMotionTransfer_multi_shot_hard_12.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_multi_shot_hard_24%20%281%29.webp" data-src="camera/scene_generalization/cameraMotionTransfer_multi_shot_hard_24%20%281%29.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_multi_shot_hard_46.webp" data-src="camera/scene_generalization/cameraMotionTransfer_multi_shot_hard_46.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot282.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot282.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot312.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot312.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot385.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot385.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot_hard_58.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot_hard_58.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot_hard_7%20%281%29.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot_hard_7%20%281%29.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new_284.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new_284.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new_8.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new_8.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element force-right"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new__295.webp" data-src="camera/scene_generalization/cameraMotionTransfer_one_shot_omini_new__295.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element force-right"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
                 </div>
                 <div class="peek-overlay"></div>
             </div>
@@ -578,24 +603,24 @@
         </section>
         
         <section id="Special-Camera-Movement-More">
-            <div class="title" style="font-size: 24px; color: #ccc;">More: Special Camera Movement</div>
+            <div class="title" style="font-size: 24px; color: #ccc;">More: Reverse-Angle &amp; Perspective Switching</div>
             <div class="category-desc fade-in-element" style="padding: 10px 20px; font-size: 1.05rem; margin-bottom: 20px;">
-                Left is the reference, and right is the generated result.
+                Additional reverse-angle and first-/third-person perspective transitions. Left is the reference, and right is the TARS result.
             </div>
             <div class="peek-container">
                 <div class="staggered-grid">
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_299.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_299.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_11.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_11.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_32%20%282%29.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_32%20%282%29.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_123.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_123.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_243.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_243.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_304.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_304.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_85.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_85.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_1.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_1.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_211.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_211.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_265.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_265.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_305.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new_305.mp4"></video></div></div>
-                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><video playsinline controls loop preload="none" data-poster="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new__281.webp" data-src="camera/special_camera_movement/cameraMotionTransfer_one_shot_omini_new__281.mp4"></video></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
+                    <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
                 </div>
                 <div class="peek-overlay"></div>
             </div>
@@ -608,36 +633,34 @@
     <section id="Comparisons-More" style="margin-bottom: 80px;">
         <div class="title" style="font-size: 24px; color: #ccc;">More: Comparisons</div>
         <div class="category-desc fade-in-element">
-            Side-by-side performance comparison against other state-of-the-art camera control methods, where the leftmost column shows the reference images. OmniDirector exhibits superior control stability and minimal object distortion. Left is the reference, and right is the generated result.
+            Side-by-side comparisons against prior re-shooting methods will be placed here. The final layout should show the source/reference, target condition, and results for TrajCrafter, CamCloneMaster, and TARS.
         </div>
         <div class="carousel-container fade-in-element">
             <div class="carousel-arrow left-arrow"><i class="fas fa-chevron-left"></i></div>
             <div class="carousel-item">
-                <video playsinline controls loop preload="none" data-poster="camera/compare/2.webp" data-src="camera/compare/2.mp4"></video>
+                <div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div>
             </div>
             <div class="carousel-item">
-                <video playsinline controls loop preload="none" data-poster="camera/compare/3.webp" data-src="camera/compare/3.mp4"></video>
+                <div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div>
             </div>
             <div class="carousel-item">
-                <video playsinline controls loop preload="none" data-poster="camera/compare/4.webp" data-src="camera/compare/4.mp4"></video>
+                <div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div>
             </div>
             <div class="carousel-item">
-                <video playsinline controls loop preload="none" data-poster="camera/compare/1.webp" data-src="camera/compare/1.mp4"></video>
+                <div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div>
             </div>
             <div class="carousel-arrow right-arrow"><i class="fas fa-chevron-right"></i></div>
         </div>
     </section>
     
-    </template>
-
     <section id="Pipeline">
-        <div class="title">Method Overview</div>
+        <div class="title">Pipeline</div>
         <div class="pipeline-placeholder">
             TARS method figure will appear here.<br>
             <small>Place the final overview image at <code>image/overall.png</code> when it is ready.</small>
         </div>
         <div class="description">
-            TARS identifies the high-noise diffusion stages that establish camera motion, then uses self-supervised learning and data scaling to acquire camera dynamics and fundamental visual representations without requiring paired re-shooting data. Joint textual-camera conditioning supports controllable video re-shooting across camera trajectory, viewpoint, and perspective.
+            TARS is conditioned on a source video, a target camera grid, and a text instruction. High-noise diffusion stages establish global scene structure, camera motion, and subject dynamics, while mid- and low-noise stages refine identity and visual details. TARS first scales self-supervised learning from temporally split videos, then routes limited cross-paired data to the high-noise regime to align subject motion under novel camera transformations.
         </div>
     </section>
 
@@ -694,8 +717,8 @@
             /* ---------------------------------------------------- */
             const navSections = [
                 { id: 'intro', element: document.querySelector('#intro') },
-                { id: 'Abstract', element: document.querySelector('#Abstract') },
-                { id: 'tars-cases', element: document.querySelector('#tars-cases') },
+                { id: 'Top-Cases-Section', element: document.querySelector('#Top-Cases-Section') },
+                { id: 'More-Cases-Section', element: document.querySelector('#More-Cases-Section') },
                 { id: 'Pipeline', element: document.querySelector('#Pipeline') },
                 { id: 'Acknowledgement', element: document.querySelector('#Acknowledgement') },
                 { id: 'ethical-considerations', element: document.querySelector('#ethical-considerations') },

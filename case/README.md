@@ -2,7 +2,15 @@
 
 Keep every demonstration asset in this directory. Do not place case videos or posters elsewhere in the repository.
 
-Current featured slots:
+## Current scaffold
+
+The live page preserves all original Top Cases, More Cases, comparison, carousel, waterfall-grid, and “Show More Cases” positions. All 87 former media positions now render as placeholders, so no legacy video is loaded or needed.
+
+Recommended TARS groups are camera trajectory control, large-motion re-shooting and novel-region synthesis, text-guided viewpoint control, reverse-angle re-shooting, and first-/third-person perspective switching. Driving and embodied-agent examples are also strong application cases from the paper.
+
+When final files arrive, keep them in case/ and provide the desired category, display order, and caption; the placeholders can then be bound without changing the page structure.
+
+Archived 12-slot draft:
 
 - `trajectory-01` through `trajectory-03`
 - `viewpoint-01` through `viewpoint-03`

@@ -762,7 +762,10 @@
             const cases = window.TARS_CASES;
             if (!cases) return;
 
-            const video = (src) => `<video playsinline controls preload="none" data-src="${src}"></video>`;
+            const video = (src) => {
+                const poster = src.replace(/\.mp4$/i, '.webp');
+                return `<video playsinline controls loop preload="none" data-poster="${poster}" data-src="${src}"></video>`;
+            };
             const tile = (src) => `<div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control">${video(src)}</div></div>`;
             const featuredTile = (src) => `<div class="prompt-wrap audio-control fade-in-element">${video(src)}</div>`;
 

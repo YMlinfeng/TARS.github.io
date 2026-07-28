@@ -173,6 +173,20 @@
         .carousel-item.pos-left video, .carousel-item.pos-right video, .carousel-item.pos-hidden video { pointer-events: none; }
         .carousel-item.pos-center video { pointer-events: auto; }
 
+        .featured-pair {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 28px;
+            margin: 42px auto 100px;
+        }
+        .featured-pair .prompt-wrap { position: relative; background: #000; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.55); }
+        .featured-pair video { display: block; width: 100%; height: auto; }
+        @media (max-width: 768px) { .featured-pair { grid-template-columns: 1fr; } }
+
+        /* Superseded placeholder-only Top Cases; the populated featured layout follows. */
+        #Dynamic-Motion-Top, #Multi-Shot-Top, #Scene-Generalization-Top,
+        #Special-Camera-Movement-Top, #Robotic-Arm-Top { display: none; }
+
         .carousel-arrow {
             position: absolute; top: 50%; transform: translateY(-50%);
             font-size: 3rem; color: rgba(255, 255, 255, 0.6); cursor: pointer; z-index: 10;
@@ -513,6 +527,32 @@
         </section>
     </div>
 
+    <div id="TARS-Featured-Cases">
+        <section id="Featured-Camera-Control">
+            <div class="title">Typical Camera Re-shooting</div>
+            <div class="category-desc fade-in-element">
+                TARS controls both the initial viewing angle and camera motion. The two representative cases below demonstrate side-view and rear-view re-shooting; in each video, the left is the reference and the right is the TARS result.
+            </div>
+            <div id="featured-camera" class="featured-pair"></div>
+        </section>
+
+        <section id="Featured-Perspective-Switching">
+            <div class="title">Perspective Switching</div>
+            <div class="category-desc fade-in-element">
+                TARS enables coherent first-person and third-person conversion across portrait and animal scenes, including large viewpoint changes beyond the source view.
+            </div>
+            <div id="featured-perspective" class="carousel-container fade-in-element"></div>
+        </section>
+
+        <section id="Featured-Robotic-Arm">
+            <div class="title">Robotic Arm Scene</div>
+            <div class="category-desc fade-in-element">
+                TARS supports viewpoint changes in embodied robotic-arm scenes while preserving task-relevant layout and temporal arm motion.
+            </div>
+            <div id="featured-robotic" class="featured-pair"></div>
+        </section>
+    </div>
+
     <div id="More-Cases-Section">
         <section id="More-Cases-Transition" class="fade-in-element" style="margin-top: 150px; text-align: center; margin-bottom: 50px;">
             <h2 style="font-size: 3rem; font-weight: 300; color: #fff; margin-bottom: 10px;">More Cases Exploration</h2>
@@ -525,7 +565,7 @@
                 Additional examples with jointly controlled initial viewpoint and camera motion. Left is the reference, and right is the TARS result.
             </div>
             <div class="peek-container">
-                <div class="staggered-grid">
+                <div class="staggered-grid" data-case-group="initial">
                     <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
                     <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
                     <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
@@ -551,7 +591,7 @@
                 Additional portrait first-person-to-third-person transitions. Left is the reference, and right is the TARS result.
             </div>
             <div class="peek-container">
-                <div class="staggered-grid">
+                <div class="staggered-grid" data-case-group="first_to_third">
                     <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
                     <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
                     <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
@@ -583,7 +623,7 @@
                 Additional portrait third-person-to-first-person transitions in different scenes and motion patterns. Left is the reference, and right is the TARS result.
             </div>
             <div class="peek-container">
-                <div class="staggered-grid">
+                <div class="staggered-grid" data-case-group="third_to_first">
                     <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
                     <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
                     <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
@@ -629,7 +669,7 @@
                 Additional animal third-person-to-first-person transitions. Left is the reference, and right is the TARS result.
             </div>
             <div class="peek-container">
-                <div class="staggered-grid">
+                <div class="staggered-grid" data-case-group="animal">
                     <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
                     <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
                     <div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control"><div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div></div></div>
@@ -715,6 +755,31 @@
     <div class="copyright-footer">
         &copy; 2026 TARS authors. All rights reserved.
     </div>
+
+    <script src="case/cases.js"></script>
+    <script>
+        (() => {
+            const cases = window.TARS_CASES;
+            if (!cases) return;
+
+            const video = (src) => `<video playsinline controls preload="none" data-src="${src}"></video>`;
+            const tile = (src) => `<div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control">${video(src)}</div></div>`;
+            const featuredTile = (src) => `<div class="prompt-wrap audio-control fade-in-element">${video(src)}</div>`;
+
+            document.querySelector('#featured-camera').innerHTML = cases.featured.camera.map(featuredTile).join('');
+            document.querySelector('#featured-robotic').innerHTML = cases.featured.robotic.map(featuredTile).join('');
+            document.querySelector('#featured-perspective').innerHTML = [
+                '<div class="carousel-arrow left-arrow"><i class="fas fa-chevron-left"></i></div>',
+                ...cases.featured.perspective.map((src) => `<div class="carousel-item">${video(src)}</div>`),
+                '<div class="carousel-arrow right-arrow"><i class="fas fa-chevron-right"></i></div>'
+            ].join('');
+
+            document.querySelectorAll('[data-case-group]').forEach((grid) => {
+                const group = grid.dataset.caseGroup;
+                grid.innerHTML = cases.more[group].map(tile).join('');
+            });
+        })();
+    </script>
 
     <script>
         // const overlay = document.getElementById('password-overlay');

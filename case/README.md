@@ -6,7 +6,7 @@ Keep every demonstration asset in this directory. Do not place case videos or po
 
 The live page preserves all original Top Cases, More Cases, comparison, carousel, waterfall-grid, and “Show More Cases” positions. All 87 former media positions now render as placeholders, so no legacy video is loaded or needed.
 
-Recommended TARS groups are camera trajectory control, large-motion re-shooting and novel-region synthesis, text-guided viewpoint control, reverse-angle re-shooting, and first-/third-person perspective switching. Driving and embodied-agent examples are also strong application cases from the paper.
+Recommended TARS groups are initial viewpoint plus camera-motion control, portrait first-person-to-third-person, portrait third-person-to-first-person, and animal third-person-to-first-person. Robotic-arm scenes are reserved for the featured Top Cases only and are intentionally not duplicated in More Cases.
 
 When final files arrive, keep them in case/ and provide the desired category, display order, and caption; the placeholders can then be bound without changing the page structure.
 

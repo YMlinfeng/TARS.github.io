@@ -312,6 +312,7 @@
                         <span class="icon"><i class="fas fa-microscope"></i></span><span class="sansfont">More Research</span>
                     </a>
                     <div id="dropdown-menu-research" class="dropdown-menu" style="display:none; position:absolute; top:100%; left:50%; transform:translateX(-50%); background-color:#333; border-radius:6px; padding:4px 0; margin-top:6px; min-width:240px; max-width:280px; max-height:140px; overflow-y:auto; font-size:14px; z-index:3000; white-space:nowrap; box-shadow: 0 10px 25px rgba(0,0,0,0.8);">
+                        <a href="https://ymlinfeng.github.io/OmniDirector.github.io/" target="_blank" class="dropdown-item" style="display:block; padding:6px 15px; color:white; text-decoration:none;">OmniDirector</a>
                         <a href="https://huggingface.co/papers/2603.03160" target="_blank" class="dropdown-item" style="display:block; padding:6px 15px; color:white; text-decoration:none;">Kling-MotionControl</a>
                         <a href="https://camclonemaster.github.io/" target="_blank" class="dropdown-item" style="display:block; padding:6px 15px; color:white; text-decoration:none;">CamCloneMaster</a>
                         <a href="https://ziqiaopeng.github.io/OmniSync/" target="_blank" class="dropdown-item" style="display:block; padding:6px 15px; color:white; text-decoration:none;">OmniSync</a>
@@ -408,9 +409,9 @@
     <!-- Restored project-page structure. Every media slot is intentionally a placeholder until TARS videos are provided in case/. -->
     <div id="Top-Cases-Section">
         <section id="Dynamic-Motion-Top">
-            <div class="title">Camera Trajectory Control</div>
+            <div class="title">Initial Viewpoint &amp; Camera Motion Control</div>
             <div class="category-desc fade-in-element">
-                Given a source video and a target camera grid, TARS follows the intended camera motion while preserving the subject, action, and scene content. This group is intended for dynamic scenes with challenging camera trajectories. For each example, the left is the reference and the right is the TARS result.
+                TARS jointly controls the target initial viewpoint and camera trajectory, allowing the camera to begin from a specified viewing angle before following the requested motion. For each example, the left is the reference and the right is the TARS result.
             </div>
             
             <div class="carousel-container fade-in-element">
@@ -429,9 +430,9 @@
         </section>
         
         <section id="Multi-Shot-Top">
-            <div class="title">Large-Motion Re-shooting</div>
+            <div class="title">Portrait: Third-Person to First-Person</div>
             <div class="category-desc fade-in-element">
-                Large viewpoint changes expose regions outside the source view. TARS plausibly synthesizes these newly visible contents while retaining source appearance and temporally consistent subject dynamics. For each example, the left is the reference and the right is the TARS result.
+                TARS transforms a portrait video from a third-person observation into a first-person viewpoint while preserving identity, scene context, and temporal motion. For each example, the left is the reference and the right is the TARS result.
             </div>
             
             <div class="carousel-container fade-in-element">
@@ -450,9 +451,9 @@
         </section>
 
         <section id="Scene-Generalization-Top" style="margin-top: 100px;">
-            <div class="title">Text-Guided Viewpoint Control</div>
+            <div class="title">Portrait: Third-Person to First-Person</div>
             <div class="category-desc fade-in-element">
-                Text specifies shot scale (close-up, medium shot, and long shot) and viewing angle (front, side, high-angle, and low-angle), enabling semantically controlled re-shooting without a new explicit 3D reconstruction. For each example, the left is the reference and the right is the TARS result.
+                A second portrait setting demonstrates the same third-person-to-first-person transition under a different scene and motion pattern. For each example, the left is the reference and the right is the TARS result.
             </div>
             
             <div class="carousel-container fade-in-element">
@@ -471,9 +472,9 @@
         </section>
 
         <section id="Special-Camera-Movement-Top">
-            <div class="title">Reverse-Angle &amp; Perspective Switching</div>
+            <div class="title">Animal: Third-Person to First-Person</div>
             <div class="category-desc fade-in-element">
-                TARS supports reverse-angle re-shooting and transitions between first- and third-person perspectives. These cases are particularly suitable for human, animal, driving, and embodied-agent scenes. For each example, the left is the reference and the right is the TARS result.
+                TARS changes an animal video from third-person to first-person, maintaining plausible subject motion and a coherent new perspective. For each example, the left is the reference and the right is the TARS result.
             </div>
             
             <div class="carousel-container fade-in-element">
@@ -495,13 +496,13 @@
     <div id="More-Cases-Section">
         <section id="More-Cases-Transition" class="fade-in-element" style="margin-top: 150px; text-align: center; margin-bottom: 50px;">
             <h2 style="font-size: 3rem; font-weight: 300; color: #fff; margin-bottom: 10px;">More Cases Exploration</h2>
-            <p style="color: #999; font-size: 1.2rem;">Explore additional TARS re-shooting results across trajectory, semantic viewpoint, large-motion, and perspective conditions.</p>
+            <p style="color: #999; font-size: 1.2rem;">Explore additional TARS results for initial viewpoint and camera motion control, portrait perspective switching, and animal perspective switching.</p>
         </section>
 
         <section id="Dynamic-Motion-More">
-            <div class="title" style="font-size: 24px; color: #ccc;">More: Camera Trajectory Control</div>
+            <div class="title" style="font-size: 24px; color: #ccc;">More: Initial Viewpoint &amp; Camera Motion Control</div>
             <div class="category-desc fade-in-element" style="padding: 10px 20px; font-size: 1.05rem; margin-bottom: 20px;">
-                Additional trajectory-controlled re-shooting examples. Left is the reference, and right is the TARS result.
+                Additional examples with jointly controlled initial viewpoint and camera motion. Left is the reference, and right is the TARS result.
             </div>
             <div class="peek-container">
                 <div class="staggered-grid">
@@ -525,9 +526,9 @@
         </section>
 
         <section id="Multi-Shot-More">
-            <div class="title" style="font-size: 24px; color: #ccc;">More: Large-Motion Re-shooting</div>
+            <div class="title" style="font-size: 24px; color: #ccc;">More: Portrait: Third-Person to First-Person</div>
             <div class="category-desc fade-in-element" style="padding: 10px 20px; font-size: 1.05rem; margin-bottom: 20px;">
-                Additional large-motion cases that reveal regions beyond the source view. Left is the reference, and right is the TARS result.
+                Additional portrait third-person-to-first-person transitions. Left is the reference, and right is the TARS result.
             </div>
             <div class="peek-container">
                 <div class="staggered-grid">
@@ -557,9 +558,9 @@
         </section>
 
         <section id="Scene-Generalization-More">
-            <div class="title" style="font-size: 24px; color: #ccc;">More: Text-Guided Viewpoint Control</div>
+            <div class="title" style="font-size: 24px; color: #ccc;">More: Portrait: Third-Person to First-Person</div>
             <div class="category-desc fade-in-element" style="padding: 10px 20px; font-size: 1.05rem; margin-bottom: 20px;">
-                Additional changes in shot scale and viewing angle. Left is the reference, and right is the TARS result.
+                Additional portrait third-person-to-first-person transitions in different scenes and motion patterns. Left is the reference, and right is the TARS result.
             </div>
             <div class="peek-container">
                 <div class="staggered-grid">
@@ -603,9 +604,9 @@
         </section>
         
         <section id="Special-Camera-Movement-More">
-            <div class="title" style="font-size: 24px; color: #ccc;">More: Reverse-Angle &amp; Perspective Switching</div>
+            <div class="title" style="font-size: 24px; color: #ccc;">More: Animal: Third-Person to First-Person</div>
             <div class="category-desc fade-in-element" style="padding: 10px 20px; font-size: 1.05rem; margin-bottom: 20px;">
-                Additional reverse-angle and first-/third-person perspective transitions. Left is the reference, and right is the TARS result.
+                Additional animal third-person-to-first-person transitions. Left is the reference, and right is the TARS result.
             </div>
             <div class="peek-container">
                 <div class="staggered-grid">
@@ -633,7 +634,7 @@
     <section id="Comparisons-More" style="margin-bottom: 80px;">
         <div class="title" style="font-size: 24px; color: #ccc;">More: Comparisons</div>
         <div class="category-desc fade-in-element">
-            Side-by-side comparisons against prior re-shooting methods will be placed here. The final layout should show the source/reference, target condition, and results for TrajCrafter, CamCloneMaster, and TARS.
+            Side-by-side comparisons against prior re-shooting methods will be placed here. The final layout should show the source/reference, target condition, and results for TrajCrafter, CamCloneMaster, Seedance 2.0, and TARS.
         </div>
         <div class="carousel-container fade-in-element">
             <div class="carousel-arrow left-arrow"><i class="fas fa-chevron-left"></i></div>

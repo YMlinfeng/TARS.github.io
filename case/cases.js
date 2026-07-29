@@ -26,7 +26,6 @@ window.TARS_CASES = {
       "case/more/initial/023.mp4",
       "case/more/initial/024.mp4",
       "case/more/initial/025.mp4",
-      "case/more/initial/026.mp4",
       "case/more/initial/027.mp4",
       "case/more/initial/028.mp4",
       "case/more/initial/029.mp4",
@@ -145,7 +144,7 @@ window.TARS_CASES = {
     ],
     "camera": [
       "case/more/initial/033.mp4",
-      "case/featured/camera-back.mp4"
+      "case/more/initial/026.mp4"
     ],
     "perspective": [
       "case/more/first_to_third/002.mp4",

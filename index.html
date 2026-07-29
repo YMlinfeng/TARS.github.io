@@ -740,6 +740,10 @@
             const cases = window.TARS_CASES;
             if (!cases) return;
 
+            const firstToThirdMore = document.querySelector('#Multi-Shot-More');
+            const thirdToFirstMore = document.querySelector('#Scene-Generalization-More');
+            firstToThirdMore.before(thirdToFirstMore);
+
             const video = (src) => {
                 const poster = src.replace(/\.mp4$/i, '.webp');
                 const compressedSrc = src.replace(/\.mp4$/i, '_compress.mp4');

@@ -75,7 +75,6 @@ window.TARS_CASES = {
     ],
     "third_to_first": [
       "case/more/third_to_first/001.mp4",
-      "case/more/third_to_first/002.mp4",
       "case/more/third_to_first/003.mp4",
       "case/more/third_to_first/004.mp4",
       "case/more/third_to_first/005.mp4",
@@ -146,7 +145,6 @@ window.TARS_CASES = {
   },
   "featured": {
     "robotic": [
-      "case/featured/robotic/001.mp4",
       "case/featured/robotic/002.mp4"
     ],
     "camera": [
@@ -156,6 +154,7 @@ window.TARS_CASES = {
     "perspective": [
       "case/more/first_to_third/002.mp4",
       "case/more/third_to_first/004.mp4",
+      "case/featured/perspective/human1-chest-first-person.mp4",
       "case/more/animal/027.mp4"
     ]
   }

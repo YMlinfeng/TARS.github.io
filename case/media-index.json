@@ -420,10 +420,10 @@
     "path": "case/more/third_to_first/001.mp4"
   },
   {
-    "group": "third_to_first",
+    "group": "featured_perspective",
     "order": 2,
     "sourceName": "reCam_human1_00003_%E8%83%B8%E9%83%A8%E7%AC%AC%E4%B8%80%E4%BA%BA%E7%A7%B0.mp4",
-    "path": "case/more/third_to_first/002.mp4"
+    "path": "case/featured/perspective/human1-chest-first-person.mp4"
   },
   {
     "group": "third_to_first",

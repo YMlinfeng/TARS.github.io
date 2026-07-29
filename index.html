@@ -745,6 +745,16 @@
                 return `<video playsinline controls loop preload="none" data-poster="${poster}" data-src="${src}"></video>`;
             };
             const tile = (src) => `<div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control">${video(src)}</div></div>`;
+            const shuffled = (items, group) => {
+                const result = [...items];
+                let seed = [...group].reduce((value, character) => ((value * 31) + character.charCodeAt(0)) >>> 0, 2166136261);
+                for (let index = result.length - 1; index > 0; index--) {
+                    seed = (seed * 1664525 + 1013904223) >>> 0;
+                    const swapIndex = seed % (index + 1);
+                    [result[index], result[swapIndex]] = [result[swapIndex], result[index]];
+                }
+                return result;
+            };
             const featuredCameraCases = [...cases.featured.camera, ...cases.featured.robotic];
             document.querySelector('#featured-camera').innerHTML = [
                 '<div class="carousel-arrow left-arrow"><i class="fas fa-chevron-left"></i></div>',
@@ -759,7 +769,7 @@
 
             document.querySelectorAll('[data-case-group]').forEach((grid) => {
                 const group = grid.dataset.caseGroup;
-                grid.innerHTML = cases.more[group].map(tile).join('');
+                grid.innerHTML = shuffled(cases.more[group], group).map(tile).join('');
             });
         })();
     </script>

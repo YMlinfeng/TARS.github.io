@@ -277,6 +277,9 @@
             border: 1px dashed #4f5c52; border-radius: 12px; color: #aaa;
             background: linear-gradient(135deg, rgba(116, 255, 82, 0.08), rgba(255,255,255,0.015));
         }
+        .paper-figure { margin: 28px auto 34px; text-align: center; }
+        .paper-figure img { display: block; width: 100%; max-width: 1800px; height: auto; margin: 0 auto; border-radius: 12px; background: #fff; box-shadow: 0 18px 48px rgba(0,0,0,0.45); }
+        .paper-figure figcaption { max-width: 1180px; margin: 18px auto 0; color: #d1d1d1; font-size: 1.05rem; line-height: 1.65; text-align: left; }
 
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -308,7 +311,7 @@
                 <a href="https://openreview.net/profile?id=~Jiwen_Liu1" target="_blank" rel="noopener noreferrer"><strong><em>Jiwen Liu</em></strong></a>,
                 <a href="https://openreview.net/profile?id=~Shujuan_Li2" target="_blank" rel="noopener noreferrer"><strong><em>Shujuan Li</em></strong></a>,
                 <a href="https://openreview.net/profile?id=~Xiaohan_Li8" target="_blank" rel="noopener noreferrer"><strong><em>Xiaohan Li</em></strong></a>,
-                <a href="https://openreview.net/profile?id=~Zijie_Meng2" target="_blank" rel="noopener noreferrer"><strong><em>Zijie Meng</em></strong></a>,<br>
+                <strong><em>Zijie Meng</em></strong>,<br>
                 <a href="https://openreview.net/profile?id=~Xinyue_Liu9" target="_blank" rel="noopener noreferrer"><strong><em>Xinyue Liu</em></strong></a>,
                 <a href="https://openreview.net/profile?id=~Yulong_Xu1" target="_blank" rel="noopener noreferrer"><strong><em>Yulong Xu</em></strong></a>,
                 <a href="https://openreview.net/profile?id=~Yan_Zhou14" target="_blank" rel="noopener noreferrer"><strong><em>Yan Zhou</em></strong></a>,
@@ -531,7 +534,7 @@
         <section id="Featured-Camera-Control">
             <div class="title">Typical Camera Re-shooting</div>
             <div class="category-desc fade-in-element">
-                TARS controls both the initial viewing angle and camera motion. The two representative cases below demonstrate side-view and rear-view re-shooting; in each video, the left is the reference and the right is the TARS result.
+                TARS controls both the initial viewing angle and camera motion across human and embodied robotic-arm scenes. The examples below demonstrate side-view, rear-view, and robotic-camera re-shooting; in each video, the left is the reference and the right is the TARS result.
             </div>
             <div id="featured-camera" class="featured-pair"></div>
         </section>
@@ -544,13 +547,6 @@
             <div id="featured-perspective" class="carousel-container fade-in-element"></div>
         </section>
 
-        <section id="Featured-Robotic-Arm">
-            <div class="title">Robotic Arm Scene</div>
-            <div class="category-desc fade-in-element">
-                TARS supports viewpoint changes in embodied robotic-arm scenes while preserving task-relevant layout and temporal arm motion.
-            </div>
-            <div id="featured-robotic" class="featured-pair"></div>
-        </section>
     </div>
 
     <div id="More-Cases-Section">
@@ -692,34 +688,19 @@
     </div>
     
     <section id="Comparisons-More" style="margin-bottom: 80px;">
-        <div class="title" style="font-size: 24px; color: #ccc;">More: Comparisons</div>
-        <div class="category-desc fade-in-element">
-            Side-by-side comparisons against prior re-shooting methods will be placed here. The final layout should show the source/reference, target condition, and results for TrajCrafter, CamCloneMaster, Seedance 2.0, and TARS.
-        </div>
-        <div class="carousel-container fade-in-element">
-            <div class="carousel-arrow left-arrow"><i class="fas fa-chevron-left"></i></div>
-            <div class="carousel-item">
-                <div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div>
-            </div>
-            <div class="carousel-item">
-                <div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div>
-            </div>
-            <div class="carousel-item">
-                <div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div>
-            </div>
-            <div class="carousel-item">
-                <div class="case-placeholder"><span><strong>TARS case slot</strong><br><small>Add the replacement media in <code>case/</code></small></span></div>
-            </div>
-            <div class="carousel-arrow right-arrow"><i class="fas fa-chevron-right"></i></div>
-        </div>
+        <div class="title" style="font-size: 24px; color: #ccc;">Qualitative Comparisons</div>
+        <figure class="paper-figure fade-in-element">
+            <img src="image/qualitative-comparison.webp" alt="Qualitative comparison between TARS and prior video re-shooting methods" loading="lazy">
+            <figcaption><strong>Qualitative evaluations.</strong> TARS accurately re-shoots source videos under novel camera trajectories and viewpoints. Compared with CamClone, TrajCrafter, and SD 2.0, TARS better preserves visual appearance and temporal action dynamics while following the requested camera transformation.</figcaption>
+        </figure>
     </section>
     
     <section id="Pipeline">
         <div class="title">Pipeline</div>
-        <div class="pipeline-placeholder">
-            TARS method figure will appear here.<br>
-            <small>Place the final overview image at <code>image/overall.png</code> when it is ready.</small>
-        </div>
+        <figure class="paper-figure fade-in-element">
+            <img src="image/tars-overview.webp" alt="TARS timestep-aware self-supervised learning framework" loading="lazy">
+            <figcaption><strong>Timestep-aware self-supervised learning framework.</strong> <strong>Top:</strong> High-noise diffusion timesteps primarily learn global structure, viewpoint, and camera motion, while mid- and low-noise timesteps refine texture details. <strong>Bottom:</strong> Guided by this observation, we construct self-supervised training pairs by temporally splitting each video into two clips, enabling large-scale learning of camera transitions from unlabeled videos.</figcaption>
+        </figure>
         <div class="description">
             TARS is conditioned on a source video, a target camera grid, and a text instruction. High-noise diffusion stages establish global scene structure, camera motion, and subject dynamics, while mid- and low-noise stages refine identity and visual details. TARS first scales self-supervised learning from temporally split videos, then routes limited cross-paired data to the high-noise regime to align subject motion under novel camera transformations.
         </div>
@@ -769,8 +750,7 @@
             const tile = (src) => `<div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control">${video(src)}</div></div>`;
             const featuredTile = (src) => `<div class="prompt-wrap audio-control fade-in-element">${video(src)}</div>`;
 
-            document.querySelector('#featured-camera').innerHTML = cases.featured.camera.map(featuredTile).join('');
-            document.querySelector('#featured-robotic').innerHTML = cases.featured.robotic.map(featuredTile).join('');
+            document.querySelector('#featured-camera').innerHTML = [...cases.featured.camera, ...cases.featured.robotic].map(featuredTile).join('');
             document.querySelector('#featured-perspective').innerHTML = [
                 '<div class="carousel-arrow left-arrow"><i class="fas fa-chevron-left"></i></div>',
                 ...cases.featured.perspective.map((src) => `<div class="carousel-item">${video(src)}</div>`),

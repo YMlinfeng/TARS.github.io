@@ -311,7 +311,7 @@
                 <a href="https://openreview.net/profile?id=~Jiwen_Liu1" target="_blank" rel="noopener noreferrer"><strong><em>Jiwen Liu</em></strong></a>,
                 <a href="https://openreview.net/profile?id=~Shujuan_Li2" target="_blank" rel="noopener noreferrer"><strong><em>Shujuan Li</em></strong></a>,
                 <a href="https://openreview.net/profile?id=~Xiaohan_Li8" target="_blank" rel="noopener noreferrer"><strong><em>Xiaohan Li</em></strong></a>,
-                <strong><em>Zijie Meng</em></strong>,<br>
+                <a href="https://openreview.net/profile?id=~Shujuan_Li2" target="_blank" rel="noopener noreferrer"><strong><em>Zijie Meng</em></strong></a>,<br>
                 <a href="https://openreview.net/profile?id=~Xinyue_Liu9" target="_blank" rel="noopener noreferrer"><strong><em>Xinyue Liu</em></strong></a>,
                 <a href="https://openreview.net/profile?id=~Yulong_Xu1" target="_blank" rel="noopener noreferrer"><strong><em>Yulong Xu</em></strong></a>,
                 <a href="https://openreview.net/profile?id=~Yan_Zhou14" target="_blank" rel="noopener noreferrer"><strong><em>Yan Zhou</em></strong></a>,
@@ -536,7 +536,7 @@
             <div class="category-desc fade-in-element">
                 TARS controls both the initial viewing angle and camera motion across human and embodied robotic-arm scenes. The examples below demonstrate side-view, rear-view, and robotic-camera re-shooting; in each video, the left is the reference and the right is the TARS result.
             </div>
-            <div id="featured-camera" class="featured-pair"></div>
+            <div id="featured-camera" class="carousel-container fade-in-element"></div>
         </section>
 
         <section id="Featured-Perspective-Switching">
@@ -701,15 +701,12 @@
             <img src="image/tars-overview.webp" alt="TARS timestep-aware self-supervised learning framework" loading="lazy">
             <figcaption><strong>Timestep-aware self-supervised learning framework.</strong> <strong>Top:</strong> High-noise diffusion timesteps primarily learn global structure, viewpoint, and camera motion, while mid- and low-noise timesteps refine texture details. <strong>Bottom:</strong> Guided by this observation, we construct self-supervised training pairs by temporally splitting each video into two clips, enabling large-scale learning of camera transitions from unlabeled videos.</figcaption>
         </figure>
-        <div class="description">
-            TARS is conditioned on a source video, a target camera grid, and a text instruction. High-noise diffusion stages establish global scene structure, camera motion, and subject dynamics, while mid- and low-noise stages refine identity and visual details. TARS first scales self-supervised learning from temporally split videos, then routes limited cross-paired data to the high-noise regime to align subject motion under novel camera transformations.
-        </div>
     </section>
 
     <section id="Acknowledgement">
         <div class="title">Acknowledgement</div>
         <div class="description">
-            Acknowledgements will be added with the final paper release.
+            We thank the Kling team and all annotation contributors whose work made this project possible.
         </div>
     </section>
 
@@ -748,9 +745,12 @@
                 return `<video playsinline controls loop preload="none" data-poster="${poster}" data-src="${src}"></video>`;
             };
             const tile = (src) => `<div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control">${video(src)}</div></div>`;
-            const featuredTile = (src) => `<div class="prompt-wrap audio-control fade-in-element">${video(src)}</div>`;
-
-            document.querySelector('#featured-camera').innerHTML = [...cases.featured.camera, ...cases.featured.robotic].map(featuredTile).join('');
+            const featuredCameraCases = [...cases.featured.camera, ...cases.featured.robotic];
+            document.querySelector('#featured-camera').innerHTML = [
+                '<div class="carousel-arrow left-arrow"><i class="fas fa-chevron-left"></i></div>',
+                ...featuredCameraCases.map((src) => `<div class="carousel-item">${video(src)}</div>`),
+                '<div class="carousel-arrow right-arrow"><i class="fas fa-chevron-right"></i></div>'
+            ].join('');
             document.querySelector('#featured-perspective').innerHTML = [
                 '<div class="carousel-arrow left-arrow"><i class="fas fa-chevron-left"></i></div>',
                 ...cases.featured.perspective.map((src) => `<div class="carousel-item">${video(src)}</div>`),

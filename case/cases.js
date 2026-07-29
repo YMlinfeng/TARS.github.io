@@ -33,7 +33,6 @@ window.TARS_CASES = {
       "case/more/initial/030.mp4",
       "case/more/initial/031.mp4",
       "case/more/initial/032.mp4",
-      "case/more/initial/033.mp4",
       "case/more/initial/034.mp4",
       "case/more/initial/035.mp4",
       "case/more/initial/036.mp4",
@@ -56,7 +55,6 @@ window.TARS_CASES = {
     ],
     "first_to_third": [
       "case/more/first_to_third/001.mp4",
-      "case/more/first_to_third/002.mp4",
       "case/more/first_to_third/003.mp4",
       "case/more/first_to_third/004.mp4",
       "case/more/first_to_third/005.mp4",
@@ -76,7 +74,6 @@ window.TARS_CASES = {
     "third_to_first": [
       "case/more/third_to_first/001.mp4",
       "case/more/third_to_first/003.mp4",
-      "case/more/third_to_first/004.mp4",
       "case/more/third_to_first/005.mp4",
       "case/more/third_to_first/006.mp4",
       "case/more/third_to_first/007.mp4",
@@ -133,7 +130,6 @@ window.TARS_CASES = {
       "case/more/animal/024.mp4",
       "case/more/animal/025.mp4",
       "case/more/animal/026.mp4",
-      "case/more/animal/027.mp4",
       "case/more/animal/028.mp4",
       "case/more/animal/029.mp4",
       "case/more/animal/030.mp4",

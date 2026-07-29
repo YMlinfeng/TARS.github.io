@@ -742,7 +742,8 @@
 
             const video = (src) => {
                 const poster = src.replace(/\.mp4$/i, '.webp');
-                return `<video playsinline controls loop preload="none" data-poster="${poster}" data-src="${src}"></video>`;
+                const compressedSrc = src.replace(/\.mp4$/i, '_compress.mp4');
+                return `<video playsinline controls loop preload="none" data-poster="${poster}" data-src="${compressedSrc}"></video>`;
             };
             const tile = (src) => `<div class="staggered-item fade-in-element"><div class="prompt-wrap audio-control">${video(src)}</div></div>`;
             const shuffled = (items, group) => {

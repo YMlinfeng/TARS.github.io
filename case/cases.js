@@ -203,7 +203,8 @@ window.TARS_CASES = {
       "case/more/third_to_first/reCam_human1_10617_胸部第一人称.mp4",
       "case/more/first_to_third/reCam_humanPov_08643_大角度俯视.mp4",
       "case/featured/perspective/human1-chest-first-person.mp4",
-      "case/more/animal/027.mp4"
+      "case/more/animal/027.mp4",
+      "case/more/animal/033.mp4"
     ]
   }
 };

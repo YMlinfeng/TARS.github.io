@@ -308,20 +308,23 @@
             <div style="margin-top: 30px;"></div>
 
             <span style="opacity: 0.6; font-size: 1.35rem;">
-                <a href="https://openreview.net/profile?id=~Jiwen_Liu1" target="_blank" rel="noopener noreferrer"><strong><em>Jiwen Liu</em></strong></a>,
-                <a href="https://openreview.net/profile?id=~Shujuan_Li2" target="_blank" rel="noopener noreferrer"><strong><em>Shujuan Li</em></strong></a>,
-                <a href="https://openreview.net/profile?id=~Xiaohan_Li8" target="_blank" rel="noopener noreferrer"><strong><em>Xiaohan Li</em></strong></a>,
-                <a href="https://openreview.net/profile?id=~Shujuan_Li2" target="_blank" rel="noopener noreferrer"><strong><em>Zijie Meng</em></strong></a>,<br>
-                <a href="https://openreview.net/profile?id=~Xinyue_Liu9" target="_blank" rel="noopener noreferrer"><strong><em>Xinyue Liu</em></strong></a>,
-                <a href="https://openreview.net/profile?id=~Yulong_Xu1" target="_blank" rel="noopener noreferrer"><strong><em>Yulong Xu</em></strong></a>,
-                <a href="https://openreview.net/profile?id=~Yan_Zhou14" target="_blank" rel="noopener noreferrer"><strong><em>Yan Zhou</em></strong></a>,
-                <a href="https://openreview.net/profile?id=~Guoxin_Zhang1" target="_blank" rel="noopener noreferrer"><strong><em>Guoxin Zhang</em></strong></a>
+                <a href="https://openreview.net/profile?id=~Jiwen_Liu1" target="_blank" rel="noopener noreferrer"><strong><em>Jiwen Liu</em></strong></a><sup>1*</sup>,
+                <a href="https://openreview.net/profile?id=~Shujuan_Li2" target="_blank" rel="noopener noreferrer"><strong><em>Shujuan Li</em></strong></a><sup>1,2*</sup>,
+                <a href="https://openreview.net/profile?id=~Xiaohan_Li8" target="_blank" rel="noopener noreferrer"><strong><em>Xiaohan Li</em></strong></a><sup>1</sup>,
+                <a href="https://openreview.net/profile?id=~Shujuan_Li2" target="_blank" rel="noopener noreferrer"><strong><em>Zijie Meng</em></strong></a><sup>1,3</sup>,<br>
+                <a href="https://openreview.net/profile?id=~Xinyue_Liu9" target="_blank" rel="noopener noreferrer"><strong><em>Xinyue Liu</em></strong></a><sup>1</sup>,
+                <a href="https://openreview.net/profile?id=~Yulong_Xu1" target="_blank" rel="noopener noreferrer"><strong><em>Yulong Xu</em></strong></a><sup>1</sup>,
+                <a href="https://openreview.net/profile?id=~Yan_Zhou14" target="_blank" rel="noopener noreferrer"><strong><em>Yan Zhou</em></strong></a><sup>1</sup>,
+                <a href="https://openreview.net/profile?id=~Guoxin_Zhang1" target="_blank" rel="noopener noreferrer"><strong><em>Guoxin Zhang</em></strong></a><sup>1</sup>
             </span>
+            <div style="margin-top: 12px; opacity: 0.6; font-size: 1.05rem;">
+                <sup>1</sup>Kling Team &nbsp;&nbsp; <sup>2</sup>Tsinghua University &nbsp;&nbsp; <sup>3</sup>Peking University
+            </div>
             <div style="margin-top: 20px;"></div>
             <div style="margin-top: 75px;"></div>
             
             <div class="publication-links" style="position: relative; z-index: 2000; transform: scale(1.2); transform-origin: center center; margin-left: -20px;">
-                <span class="link-block"><a href="https://github.com/lisj575/tars" target="_blank" class="external-link button is-normal is-rounded light-btn btn-font"><span class="icon"><i class="fas fa-file-pdf"></i></span><span class="sansfont">Paper</span></a></span>
+                <span class="link-block"><a href="https://arxiv.org/abs/2607.28261" target="_blank" class="external-link button is-normal is-rounded light-btn btn-font"><span class="icon"><i class="fas fa-file-pdf"></i></span><span class="sansfont">Paper</span></a></span>
                 <span class="link-block"><a href="https://github.com/lisj575/tars" target="_blank" class="external-link button is-normal is-rounded light-btn btn-font"><span class="icon"><i class="fa fa-database" aria-hidden="true"></i></span><span class="sansfont">Code</span></a></span>
                 <span class="link-block"><a href="bib.txt" class="external-link button is-normal is-rounded light-btn btn-font"><span class="icon"><i class="fa fa-quote-left"></i></span><span class="sansfont">Cite</span></a></span>
                 <span class="link-block" style="position: relative; display: inline-block; z-index: 2000;">
@@ -355,12 +358,28 @@
     </div>
 
 
-    <section id="Abstract">
+    <!-- <section id="Abstract">
         <div class="title">Abstract</div>
         <div class="description">
             <p><strong>TL;DR:</strong> We propose a novel method to scale up the data for 3D-free video re-shooting.</p>
             <p>Video re-shooting aims to regenerate videos with controllable camera motion and viewpoint. Existing methods rely on explicit 3D priors, which are limited by reconstruction quality and often perform poorly when synthesizing previously unseen regions, or on paired videos with different camera trajectories, whose scarcity hinders generalization. We revisit video re-shooting through text-driven semantic viewpoint specification, enabling control over shot scale, viewing angle, and first-/third-person perspective. To this end, we propose TARS, a 3D-free video re-shooting paradigm. Timestep-wise sensitivity analysis reveals that camera motion is primarily established during high-noise stages, where coarse spatiotemporal structures are formed. Based on this insight, we introduce self-supervised training to learn camera dynamics and fundamental visual representations without paired re-shooting data. Through data scaling and joint textual-camera conditioning, TARS supports robust camera and viewpoint control, plausibly synthesizing regions beyond the source view under large camera motions while enabling reverse-angle re-shooting and perspective switching. Extensive experiments show that TARS provides more accurate and temporally consistent camera control than prior methods while requiring minimal paired data.</p>
         </div>
+    </section> -->
+
+    <section id="Introduction">
+            <div class="title">Introduction</div>
+            <div class="category-desc fade-in-element">
+                TL;DR: We propose TARS to re-shoot the source video with target camera trajectories and viewpoints.
+            </div>
+            <div id="videoBox" style="position:relative; width:100%; max-width:100%;">
+            <a href="https://www.youtube.com/watch?v=2GpDzZRBNFc" target="_blank" rel="noopener">
+                <img
+                src="./image/youtube_figure.png"
+                alt="Play video"
+                style="width:60%; display:block; cursor:pointer; margin:0 auto;"
+                />
+            </a>
+            </div>
     </section>
 
     <!-- Previous 12-slot draft retained for reference; the complete original layout below is the live case page.
@@ -690,7 +709,7 @@
     <section id="Comparisons-More" style="margin-bottom: 80px;">
         <div class="title" style="font-size: 24px; color: #ccc;">Qualitative Comparisons</div>
         <figure class="paper-figure fade-in-element">
-            <img src="image/qualitative-comparison.webp" alt="Qualitative comparison between TARS and prior video re-shooting methods" loading="lazy">
+            <img src="image/qualitative-comparison.png" alt="Qualitative comparison between TARS and prior video re-shooting methods" loading="lazy">
             <figcaption><strong>Qualitative evaluations.</strong> TARS accurately re-shoots source videos under novel camera trajectories and viewpoints. Compared with CamClone, TrajCrafter, and SD 2.0, TARS better preserves visual appearance and temporal action dynamics while following the requested camera transformation.</figcaption>
         </figure>
     </section>
@@ -698,7 +717,7 @@
     <section id="Pipeline">
         <div class="title">Pipeline</div>
         <figure class="paper-figure fade-in-element">
-            <img src="image/tars-overview.webp" alt="TARS timestep-aware self-supervised learning framework" loading="lazy">
+            <img src="image/tars-overview.png" alt="TARS timestep-aware self-supervised learning framework" loading="lazy">
             <figcaption><strong>Timestep-aware self-supervised learning framework.</strong> <strong>Top:</strong> High-noise diffusion timesteps primarily learn global structure, viewpoint, and camera motion, while mid- and low-noise timesteps refine texture details. <strong>Bottom:</strong> Guided by this observation, we construct self-supervised training pairs by temporally splitting each video into two clips, enabling large-scale learning of camera transitions from unlabeled videos.</figcaption>
         </figure>
     </section>
@@ -834,16 +853,21 @@
 
 
             /* ---------------------------------------------------- */
-            /* 2. 重写升级：兼容 3 或 4个视频的 3D 轮播图控制系统   */
+            /* 2. 支持任意数量视频的 3D 轮播图控制系统               */
             /* ---------------------------------------------------- */
             document.querySelectorAll('.carousel-container').forEach(container => {
                 let items = Array.from(container.querySelectorAll('.carousel-item'));
-                let states = [];
-                
-                if (items.length === 3) {
-                    states = ['pos-left', 'pos-center', 'pos-right'];
-                } else if (items.length === 4) {
-                    states = ['pos-left', 'pos-center', 'pos-right', 'pos-hidden'];
+                let states = items.map(() => 'pos-hidden');
+
+                if (items.length === 1) {
+                    states[0] = 'pos-center';
+                } else if (items.length === 2) {
+                    states[0] = 'pos-left';
+                    states[1] = 'pos-center';
+                } else if (items.length >= 3) {
+                    states[0] = 'pos-left';
+                    states[1] = 'pos-center';
+                    states[2] = 'pos-right';
                 }
 
                 function applyStates() {
